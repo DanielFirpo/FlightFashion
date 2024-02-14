@@ -1,0 +1,150 @@
+{
+  "kind": "singleType",
+  "collectionName": "homepages",
+  "info": {
+    "singularName": "homepage",
+    "pluralName": "homepages",
+    "displayName": "Homepage",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroTitle": {
+      "type": "string",
+      "default": "Explore our carefully curated fashion collection",
+      "required": true
+    },
+    "heroSubtitle": {
+      "type": "string",
+      "default": "Dive into our vast catalog of sophisticated styles",
+      "required": true
+    },
+    "heroButton": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::link.link"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "leftHalfImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "rightHalfTitle": {
+      "type": "string",
+      "required": true,
+      "default": "Why should you shop at Flight?"
+    },
+    "rightHalfText": {
+      "type": "text",
+      "default": "At Flight, we offer more than just clothing - we provide an experience. With our meticulously curated selection of fashion-forward styles, you'll discover unique pieces that reflect your individuality. Our commitment to quality ensures that each item meets the highest standards, so you can shop with confidence knowing you're investing in pieces that will last.",
+      "required": true
+    },
+    "wideImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "wideImageText": {
+      "type": "string",
+      "required": true,
+      "default": "Reinvent Your Look"
+    },
+    "column1Title": {
+      "type": "string",
+      "required": true,
+      "default": "Trendy Collections for Every Preference"
+    },
+    "column2Title": {
+      "type": "string",
+      "required": true,
+      "default": "Effortless Online Retail Experience"
+    },
+    "column3Title": {
+      "type": "string",
+      "default": "Made with High Quality Fabrics",
+      "required": true
+    },
+    "column4Title": {
+      "type": "string",
+      "required": true,
+      "default": "Fast Shipping and Free Returns"
+    },
+    "column1Text": {
+      "type": "text",
+      "required": true,
+      "default": "Discover trendy collections meticulously curated for diverse tastes. Whether your style is chic and sophisticated or bold and edgy, find something to elevate your wardrobe. With a focus on quality and style, redefine your fashion journey with us."
+    },
+    "column2Text": {
+      "type": "text",
+      "default": "Experience effortless online retail with us. Our user-friendly interface and streamlined checkout process ensure a stress-free shopping journey. Shop securely and confidently, knowing our responsive customer support is here to assist you every step of the way.",
+      "required": true
+    },
+    "column3Text": {
+      "type": "text",
+      "default": "Crafted using only the finest high-quality fabrics, our garments exude luxury and durability, ensuring both comfort and style with every wear. Each piece is meticulously constructed to withstand the test of time, promising a superior and indulgent experience for the discerning fashion enthusiast.",
+      "required": true
+    },
+    "column4Text": {
+      "type": "text",
+      "default": " Experience the convenience of prompt shipping and hassle-free returns, ensuring you receive your desired items swiftly and with ease. Our commitment to customer satisfaction means you can shop confidently, knowing that your needs are our priority from purchase to delivery and beyond.",
+      "required": true
+    },
+    "saleImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "saleImageTitle": {
+      "type": "string",
+      "required": true,
+      "default": "where sophistication meets style"
+    },
+    "saleText": {
+      "type": "string",
+      "default": "Dive into fashion as a canvas for individuality and self-expression, where every outfit tells a unique story.",
+      "required": true
+    },
+    "saleDiscount": {
+      "type": "string",
+      "required": true,
+      "default": "60%"
+    },
+    "saleButton": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::link.link"
+    }
+  }
+}

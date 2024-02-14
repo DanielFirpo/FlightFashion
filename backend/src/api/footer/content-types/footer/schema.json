@@ -1,0 +1,56 @@
+{
+  "kind": "singleType",
+  "collectionName": "footers",
+  "info": {
+    "singularName": "footer",
+    "pluralName": "footers",
+    "displayName": "Footer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "default": "Title"
+    },
+    "slogan": {
+      "type": "string",
+      "required": true,
+      "default": "The greatest fashion company ever. Like ever ever."
+    },
+    "column1Title": {
+      "type": "string",
+      "required": true,
+      "default": "Customer Care"
+    },
+    "column2Title": {
+      "type": "string",
+      "required": true,
+      "default": "Contact Us"
+    },
+    "column3Title": {
+      "type": "string",
+      "default": "Social Media",
+      "required": true
+    },
+    "column_1_links": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::link.link"
+    },
+    "column_2_links": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::link.link"
+    },
+    "column_3_links": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::link.link"
+    }
+  }
+}
