@@ -3,12 +3,12 @@ import { fetchAPI } from "@/src/app/_utils/strapiApi";
 import ProductImages from "./_components/ProductImages";
 import ProductForm from "./_components/ProductForm";
 
-export default async function Product(params: { params: { slug: string } }) {
+export default async function Product(props: { params: { product: string } }) {
   "use server";
 
   const productData: Product = (
     await fetchAPI("/products", {
-      filters: { slug: params.params.slug },
+      filters: { slug: props.params.product },
       populate: "images,product_sizes,product_colors",
     })
   ).data[0];

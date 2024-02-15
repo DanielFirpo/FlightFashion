@@ -21,9 +21,9 @@ export default function (props: any) {
 
   return (
     <div className="w-full">
-      <div className="flex justify-center">
+      <div className="flex justify-center overflow-hidden cursor-zoom-in">
         <img
-          className="bg-imageBackground aspect-square max-h-96 rounded-3xl"
+          className="bg-imageBackground aspect-square max-h-96 rounded-3xl hover:scale-150 transition-all"
           src={
             getLargestImageResponse(selectedImage) ??
             "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081"
