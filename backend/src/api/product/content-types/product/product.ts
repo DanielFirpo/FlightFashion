@@ -3,8 +3,12 @@
 import { Media } from '../../../../common/schemas-to-ts/Media';
 import { ProductColor } from '../../../product-color/content-types/product-color/product-color';
 import { ProductSize } from '../../../product-size/content-types/product-size/product-size';
+import { Category } from '../../../category/content-types/category/category';
+import { ProductTag } from '../../../product-tag/content-types/product-tag/product-tag';
 import { ProductColor_Plain } from '../../../product-color/content-types/product-color/product-color';
 import { ProductSize_Plain } from '../../../product-size/content-types/product-size/product-size';
+import { Category_Plain } from '../../../category/content-types/category/category';
+import { ProductTag_Plain } from '../../../product-tag/content-types/product-tag/product-tag';
 import { AdminPanelRelationPropertyModification } from '../../../../common/schemas-to-ts/AdminPanelRelationPropertyModification';
 
 export interface Product {
@@ -19,6 +23,8 @@ export interface Product {
     images?: { data: Media[] };
     product_colors: { data: ProductColor[] };
     product_sizes: { data: ProductSize[] };
+    category?: { data: Category };
+    product_tags?: { data: ProductTag[] };
   };
 }
 export interface Product_Plain {
@@ -32,6 +38,8 @@ export interface Product_Plain {
   images?: Media[];
   product_colors: ProductColor_Plain[];
   product_sizes: ProductSize_Plain[];
+  category?: Category_Plain;
+  product_tags?: ProductTag_Plain[];
 }
 
 export interface Product_NoRelations {
@@ -45,6 +53,8 @@ export interface Product_NoRelations {
   images?: number[];
   product_colors: number[];
   product_sizes: number[];
+  category?: number;
+  product_tags?: number[];
 }
 
 export interface Product_AdminPanelLifeCycle {
@@ -58,4 +68,6 @@ export interface Product_AdminPanelLifeCycle {
   images?: AdminPanelRelationPropertyModification<Media>[];
   product_colors: AdminPanelRelationPropertyModification<ProductColor_Plain>;
   product_sizes: AdminPanelRelationPropertyModification<ProductSize_Plain>;
+  category?: AdminPanelRelationPropertyModification<Category_Plain>;
+  product_tags?: AdminPanelRelationPropertyModification<ProductTag_Plain>;
 }

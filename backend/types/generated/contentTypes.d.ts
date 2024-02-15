@@ -781,6 +781,48 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiCategoryCategory extends Schema.CollectionType {
+  collectionName: 'categories';
+  info: {
+    singularName: 'category';
+    pluralName: 'categories';
+    displayName: 'Product Category';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String &
+      Attribute.Required &
+      Attribute.Unique &
+      Attribute.DefaultTo<'T-Shirts'>;
+    bannerText: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'Finest Quality T-Shirts'>;
+    products: Attribute.Relation<
+      'api::category.category',
+      'oneToMany',
+      'api::product.product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiFooterFooter extends Schema.SingleType {
   collectionName: 'footers';
   info: {
@@ -1029,6 +1071,16 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'oneToMany',
       'api::product-size.product-size'
     >;
+    category: Attribute.Relation<
+      'api::product.product',
+      'manyToOne',
+      'api::category.category'
+    >;
+    product_tags: Attribute.Relation<
+      'api::product.product',
+      'manyToMany',
+      'api::product-tag.product-tag'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1122,6 +1174,97 @@ export interface ApiProductSizeProductSize extends Schema.CollectionType {
   };
 }
 
+export interface ApiProductTagProductTag extends Schema.CollectionType {
+  collectionName: 'product_tags';
+  info: {
+    singularName: 'product-tag';
+    pluralName: 'product-tags';
+    displayName: 'Product Tag';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String &
+      Attribute.Required &
+      Attribute.Unique &
+      Attribute.DefaultTo<'Casual'>;
+    products: Attribute.Relation<
+      'api::product-tag.product-tag',
+      'manyToMany',
+      'api::product.product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::product-tag.product-tag',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::product-tag.product-tag',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiProductsPageProductsPage extends Schema.SingleType {
+  collectionName: 'products_pages';
+  info: {
+    singularName: 'products-page';
+    pluralName: 'products-pages';
+    displayName: 'Products Page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    filterTitle1: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'Filter by Gender'>;
+    filterTitle2: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'Filter by Style'>;
+    filterTitle3: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'Filter by Age'>;
+    filter_list_1: Attribute.Relation<
+      'api::products-page.products-page',
+      'oneToMany',
+      'api::product-tag.product-tag'
+    >;
+    filter_list_2: Attribute.Relation<
+      'api::products-page.products-page',
+      'oneToMany',
+      'api::product-tag.product-tag'
+    >;
+    filter_list_3: Attribute.Relation<
+      'api::products-page.products-page',
+      'oneToMany',
+      'api::product-tag.product-tag'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::products-page.products-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::products-page.products-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1140,6 +1283,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::category.category': ApiCategoryCategory;
       'api::footer.footer': ApiFooterFooter;
       'api::homepage.homepage': ApiHomepageHomepage;
       'api::link.link': ApiLinkLink;
@@ -1147,6 +1291,8 @@ declare module '@strapi/types' {
       'api::product.product': ApiProductProduct;
       'api::product-color.product-color': ApiProductColorProductColor;
       'api::product-size.product-size': ApiProductSizeProductSize;
+      'api::product-tag.product-tag': ApiProductTagProductTag;
+      'api::products-page.products-page': ApiProductsPageProductsPage;
     }
   }
 }

@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_tags",
+  "info": {
+    "singularName": "product-tag",
+    "pluralName": "product-tags",
+    "displayName": "Product Tag"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "default": "Casual",
+      "required": true,
+      "unique": true
+    },
+    "products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product",
+      "mappedBy": "product_tags"
+    }
+  }
+}

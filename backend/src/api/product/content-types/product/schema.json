@@ -63,6 +63,18 @@
       "relation": "oneToMany",
       "target": "api::product-size.product-size",
       "mappedBy": "product"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "products"
+    },
+    "product_tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product-tag.product-tag",
+      "inversedBy": "products"
     }
   }
 }

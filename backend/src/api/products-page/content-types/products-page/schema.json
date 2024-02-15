@@ -1,0 +1,45 @@
+{
+  "kind": "singleType",
+  "collectionName": "products_pages",
+  "info": {
+    "singularName": "products-page",
+    "pluralName": "products-pages",
+    "displayName": "Products Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "filterTitle1": {
+      "type": "string",
+      "required": true,
+      "default": "Filter by Gender"
+    },
+    "filterTitle2": {
+      "type": "string",
+      "default": "Filter by Style",
+      "required": true
+    },
+    "filterTitle3": {
+      "type": "string",
+      "required": true,
+      "default": "Filter by Age"
+    },
+    "filter_list_1": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-tag.product-tag"
+    },
+    "filter_list_2": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-tag.product-tag"
+    },
+    "filter_list_3": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-tag.product-tag"
+    }
+  }
+}
