@@ -28,6 +28,11 @@
       "relation": "oneToMany",
       "target": "api::product.product",
       "mappedBy": "category"
+    },
+    "slug": {
+      "type": "uid",
+      "required": true,
+      "targetField": "name"
     }
   }
 }

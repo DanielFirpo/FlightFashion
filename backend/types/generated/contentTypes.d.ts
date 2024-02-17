@@ -805,6 +805,7 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
       'oneToMany',
       'api::product.product'
     >;
+    slug: Attribute.UID<'api::category.category', 'name'> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1055,22 +1056,14 @@ export interface ApiProductProduct extends Schema.CollectionType {
     isBestSeller: Attribute.Boolean &
       Attribute.Required &
       Attribute.DefaultTo<false>;
-    description: Attribute.Text & Attribute.DefaultTo<'Product Description'>;
+    description: Attribute.Text &
+      Attribute.Required &
+      Attribute.DefaultTo<'Product Description'>;
     price: Attribute.Decimal & Attribute.Required & Attribute.DefaultTo<9.99>;
     discountPercent: Attribute.Integer &
       Attribute.Required &
       Attribute.DefaultTo<0>;
     images: Attribute.Media;
-    product_colors: Attribute.Relation<
-      'api::product.product',
-      'oneToMany',
-      'api::product-color.product-color'
-    >;
-    product_sizes: Attribute.Relation<
-      'api::product.product',
-      'oneToMany',
-      'api::product-size.product-size'
-    >;
     category: Attribute.Relation<
       'api::product.product',
       'manyToOne',
@@ -1080,6 +1073,16 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'api::product.product',
       'manyToMany',
       'api::product-tag.product-tag'
+    >;
+    product_sizes: Attribute.Relation<
+      'api::product.product',
+      'manyToMany',
+      'api::product-size.product-size'
+    >;
+    product_colors: Attribute.Relation<
+      'api::product.product',
+      'manyToMany',
+      'api::product-color.product-color'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1114,9 +1117,9 @@ export interface ApiProductColorProductColor extends Schema.CollectionType {
     name: Attribute.String & Attribute.Required & Attribute.DefaultTo<'purple'>;
     hex: Attribute.String & Attribute.Required & Attribute.DefaultTo<'#A020F0'>;
     fee: Attribute.Decimal & Attribute.Required & Attribute.DefaultTo<0>;
-    product: Attribute.Relation<
+    products: Attribute.Relation<
       'api::product-color.product-color',
-      'manyToOne',
+      'manyToMany',
       'api::product.product'
     >;
     createdAt: Attribute.DateTime;
@@ -1151,9 +1154,9 @@ export interface ApiProductSizeProductSize extends Schema.CollectionType {
   attributes: {
     name: Attribute.String & Attribute.Required & Attribute.DefaultTo<'S'>;
     fee: Attribute.Decimal & Attribute.Required & Attribute.DefaultTo<0>;
-    product: Attribute.Relation<
+    products: Attribute.Relation<
       'api::product-size.product-size',
-      'manyToOne',
+      'manyToMany',
       'api::product.product'
     >;
     createdAt: Attribute.DateTime;
@@ -1180,12 +1183,13 @@ export interface ApiProductTagProductTag extends Schema.CollectionType {
     singularName: 'product-tag';
     pluralName: 'product-tags';
     displayName: 'Product Tag';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String &
+    displayName: Attribute.String &
       Attribute.Required &
       Attribute.Unique &
       Attribute.DefaultTo<'Casual'>;
@@ -1194,6 +1198,8 @@ export interface ApiProductTagProductTag extends Schema.CollectionType {
       'manyToMany',
       'api::product.product'
     >;
+    name: Attribute.UID<'api::product-tag.product-tag', 'displayName'> &
+      Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1218,6 +1224,7 @@ export interface ApiProductsPageProductsPage extends Schema.SingleType {
     singularName: 'products-page';
     pluralName: 'products-pages';
     displayName: 'Products Page';
+    description: '';
   };
   options: {
     draftAndPublish: true;

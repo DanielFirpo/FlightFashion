@@ -7,14 +7,12 @@ import { Link } from "@apiTypes/link/content-types/link/link";
 export async function NavbarLinkClient(props: Link) {
   let pathname = usePathname();
 
-  if (pathname.includes("products")) {
-    pathname = "/products";
-  }
-
+  const firstRoute = "/" + (pathname.split("/")[1]);
+  
   return (
     <NavbarLink
       link={props}
-      isActive={pathname === props.attributes.href}
+      isActive={firstRoute === props.attributes.href}
     ></NavbarLink>
   );
 }

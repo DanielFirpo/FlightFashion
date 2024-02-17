@@ -1,28 +1,7 @@
 import qs from "qs";
 import { Media } from "@strapiTypes/schemas-to-ts/Media";
 
-export function getSmallestImageResponse(
-  image: Media | undefined,
-  noSmallerThan:
-    | "thumbnail"
-    | "xsmall"
-    | "small"
-    | "medium"
-    | "large"
-    | "xlarge" = "thumbnail",
-): string | undefined {
-  const formats = ["thumbnail", "xsmall", "small", "medium", "large", "xlarge"];
-  for (const format of formats) {
-    console.log("a", noSmallerThan, format);
-    if ((image?.attributes?.formats as any)[format]) {
-      return (
-        process.env.NEXT_PUBLIC_API_URL +
-        (image?.attributes.formats as any)[format].url
-      );
-    }
-  }
-}
-
+type ImageSize = "thumbnail" | "small" | "medium" | "large";
 /**
  * Get a specific image URL by size, will return the closest size if unavailable.
  * @param {Media} image - The image.
@@ -31,49 +10,29 @@ export function getSmallestImageResponse(
  */
 export function getImageURLBySize(
   image: Media,
-  size:
-    | "thumbnail"
-    | "xsmall"
-    | "small"
-    | "medium"
-    | "large"
-    | "xlarge" = "medium",
+  size: ImageSize = "medium",
 ): string | undefined {
-  const formats = ["thumbnail", "xsmall", "small", "medium", "large", "xlarge"];
+  const formats: ImageSize[] = ["thumbnail", "small", "medium", "large"];
 
-  const requestedImage = (image.attributes.formats as any)[size]?.url;
+  const requestedImage = image.attributes.formats[size]?.url;
   if (requestedImage) return process.env.NEXT_PUBLIC_API_URL + requestedImage;
 
   let smaller = formats.indexOf(size) - 1;
   let larger = formats.indexOf(size) + 1;
 
   for (; formats[smaller] || formats[larger]; smaller--, larger++) {
-    const smallerFormat = formats[smaller];
-    const largerFormat = formats[larger];
+    const smallerFormat: ImageSize = formats[smaller];
+    const largerFormat: ImageSize = formats[larger];
 
-    if ((image.attributes.formats as any)[smallerFormat]) {
+    if (image.attributes.formats[smallerFormat]) {
       return (
         process.env.NEXT_PUBLIC_API_URL +
-        (image.attributes.formats as any)[smallerFormat].url
+        image.attributes.formats[smallerFormat].url
       );
-    } else if ((image.attributes.formats as any)[largerFormat]) {
+    } else if (image.attributes.formats[largerFormat]) {
       return (
         process.env.NEXT_PUBLIC_API_URL +
-        (image.attributes.formats as any)[largerFormat].url
-      );
-    }
-  }
-}
-
-export function getLargestImageResponse(
-  image: Media | undefined,
-): string | undefined {
-  const formats = ["thumbnail", "xsmall", "small", "medium", "large", "xlarge"];
-  for (let i = formats.length - 1; i >= 0; i--) {
-    if ((image?.attributes?.formats as any)[formats[i]]) {
-      return (
-        process.env.NEXT_PUBLIC_API_URL +
-        (image?.attributes.formats as any)[formats[i]]?.url
+        image.attributes.formats[largerFormat].url
       );
     }
   }
@@ -83,27 +42,20 @@ export function getStrapiURL(path = "") {
   return `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337"}${path}`;
 }
 
+/**
+ * Server only.
+ */
 export async function fetchAPI(
   path: string,
   urlParamsObject = {},
   options = {},
 ) {
   try {
-    // Merge default and user options
-    const mergedOptions = {
-      next: { revalidate: 10 },
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.API_TOKEN ? process.env.API_TOKEN : process.env.NEXT_PUBLIC_API_TOKEN}`,
-      },
-      ...options,
-    };
-
-    // Build request URL
-    const queryString = qs.stringify(urlParamsObject);
-    const requestUrl = `${getStrapiURL(
-      `/api${path}${queryString ? `?${queryString}` : ""}`,
-    )}`;
+    const { requestUrl, mergedOptions } = buildStrapiRequest(
+      path,
+      urlParamsObject,
+      options,
+    );
 
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions);
@@ -115,4 +67,45 @@ export async function fetchAPI(
       `Please check if your server is running and you set all the required tokens.`,
     );
   }
+}
+
+export async function fetchAPIClient(requestUrl: string, mergedOptions = {}) {
+  try {
+    // Trigger API call
+    const response = await fetch(requestUrl, mergedOptions);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error(
+      `Please check if your server is running and you set all the required tokens.`,
+    );
+  }
+}
+
+/**
+ * Client only.
+ */
+export function buildStrapiRequest(
+  path: string,
+  urlParamsObject = {},
+  options = {},
+) {
+  // Merge default and user options
+  const mergedOptions = {
+    next: { revalidate: 10 },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.API_TOKEN ? process.env.API_TOKEN : process.env.NEXT_PUBLIC_API_TOKEN}`,
+    },
+    ...options,
+  };
+
+  // Build request URL
+  const queryString = qs.stringify(urlParamsObject);
+  const requestUrl = `${getStrapiURL(
+    `/api${path}${queryString ? `?${queryString}` : ""}`,
+  )}`;
+
+  return { requestUrl, mergedOptions };
 }

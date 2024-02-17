@@ -30,7 +30,7 @@ export default async function Home() {
         style={{
           backgroundImage:
             'url("' +
-            getImageURLBySize(pageData.attributes.heroImage.data, "xlarge") +
+            getImageURLBySize(pageData.attributes.heroImage.data, "large") +
             '")',
           aspectRatio: "16 / 9",
         }}
@@ -105,7 +105,7 @@ export default async function Home() {
         style={{
           backgroundImage:
             'url("' +
-            getImageURLBySize(pageData.attributes.wideImage.data, "xlarge") +
+            getImageURLBySize(pageData.attributes.wideImage.data, "large") +
             '")',
         }}
       >
@@ -119,7 +119,7 @@ export default async function Home() {
           style={{
             backgroundImage:
               'url("' +
-              getImageURLBySize(pageData.attributes.saleImage.data, "xlarge") +
+              getImageURLBySize(pageData.attributes.saleImage.data, "large") +
               '")',
             aspectRatio: "16 / 9",
           }}

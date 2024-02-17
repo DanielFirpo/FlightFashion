@@ -29,7 +29,8 @@
     },
     "description": {
       "type": "text",
-      "default": "Product Description"
+      "default": "Product Description",
+      "required": true
     },
     "price": {
       "type": "decimal",
@@ -52,18 +53,6 @@
         "audios"
       ]
     },
-    "product_colors": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product-color.product-color",
-      "mappedBy": "product"
-    },
-    "product_sizes": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product-size.product-size",
-      "mappedBy": "product"
-    },
     "category": {
       "type": "relation",
       "relation": "manyToOne",
@@ -75,6 +64,18 @@
       "relation": "manyToMany",
       "target": "api::product-tag.product-tag",
       "inversedBy": "products"
+    },
+    "product_sizes": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product-size.product-size",
+      "mappedBy": "products"
+    },
+    "product_colors": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product-color.product-color",
+      "mappedBy": "products"
     }
   }
 }

@@ -28,6 +28,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en" className={`${dmSans.variable} ${alumniSans.variable}`}>
       <body className="font-dmSans min-w-screen min-h-screen bg-backgroundGray px-10 pb-10 pt-5">

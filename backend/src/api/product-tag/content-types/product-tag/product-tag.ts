@@ -7,24 +7,28 @@ import { AdminPanelRelationPropertyModification } from '../../../../common/schem
 export interface ProductTag {
   id: number;
   attributes: {
-    createdAt: Date;    updatedAt: Date;    publishedAt?: Date;    name: string;
+    createdAt: Date;    updatedAt: Date;    publishedAt?: Date;    displayName: string;
     products?: { data: Product[] };
+    name: string;
   };
 }
 export interface ProductTag_Plain {
   id: number;
-  createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
+  createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  displayName: string;
   products?: Product_Plain[];
+  name: string;
 }
 
 export interface ProductTag_NoRelations {
   id: number;
-  createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
+  createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  displayName: string;
   products?: number[];
+  name: string;
 }
 
 export interface ProductTag_AdminPanelLifeCycle {
   id: number;
-  createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
+  createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  displayName: string;
   products?: AdminPanelRelationPropertyModification<Product_Plain>;
+  name: string;
 }

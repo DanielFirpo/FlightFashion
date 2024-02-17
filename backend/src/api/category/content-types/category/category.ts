@@ -10,6 +10,7 @@ export interface Category {
     createdAt: Date;    updatedAt: Date;    publishedAt?: Date;    name: string;
     bannerText: string;
     products: { data: Product[] };
+    slug: string;
   };
 }
 export interface Category_Plain {
@@ -17,6 +18,7 @@ export interface Category_Plain {
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
   bannerText: string;
   products: Product_Plain[];
+  slug: string;
 }
 
 export interface Category_NoRelations {
@@ -24,6 +26,7 @@ export interface Category_NoRelations {
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
   bannerText: string;
   products: number[];
+  slug: string;
 }
 
 export interface Category_AdminPanelLifeCycle {
@@ -31,4 +34,5 @@ export interface Category_AdminPanelLifeCycle {
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
   bannerText: string;
   products: AdminPanelRelationPropertyModification<Product_Plain>;
+  slug: string;
 }

@@ -12,6 +12,7 @@ const config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
 	],
   prefix: "",
+  mode: 'jit',
   theme: {
     container: {
       center: true,

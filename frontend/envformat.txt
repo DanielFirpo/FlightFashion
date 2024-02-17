@@ -1,0 +1,6 @@
+# used in SSR, full access token not sent to client:
+API_TOKEN="***"
+# used in CSR, restricted access token safe for publicication:
+NEXT_PUBLIC_API_TOKEN="***"
+NEXT_PUBLIC_API_URL="http://localhost:1337"
+NODE_ENV === "development"

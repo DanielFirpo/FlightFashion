@@ -28,9 +28,9 @@
       "default": 0,
       "required": true
     },
-    "product": {
+    "products": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::product.product",
       "inversedBy": "product_colors"
     }

@@ -9,26 +9,26 @@ export interface ProductSize {
   attributes: {
     createdAt: Date;    updatedAt: Date;    publishedAt?: Date;    name: string;
     fee: number;
-    product?: { data: Product };
+    products?: { data: Product[] };
   };
 }
 export interface ProductSize_Plain {
   id: number;
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
   fee: number;
-  product?: Product_Plain;
+  products?: Product_Plain[];
 }
 
 export interface ProductSize_NoRelations {
   id: number;
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
   fee: number;
-  product?: number;
+  products?: number[];
 }
 
 export interface ProductSize_AdminPanelLifeCycle {
   id: number;
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
   fee: number;
-  product?: AdminPanelRelationPropertyModification<Product_Plain>;
+  products?: AdminPanelRelationPropertyModification<Product_Plain>;
 }

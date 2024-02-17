@@ -15,21 +15,21 @@ export default function ProductForm(props: { productData: Product }) {
 
   const productData = props.productData;
 
-  const [colorSelection, setColorSelection] = useState<ProductColor>(
-    props.productData.attributes.product_colors.data[0],
-  );
-  const [sizeSelection, setSizeSelection] = useState<ProductSize>(
-    props.productData.attributes.product_sizes.data[0],
+  const [colorSelection, setColorSelection] = useState<
+    ProductColor | undefined
+  >(props.productData.attributes.product_colors?.data[0]);
+  const [sizeSelection, setSizeSelection] = useState<ProductSize | undefined>(
+    props.productData.attributes.product_sizes?.data[0],
   );
   const [quantitySelection, setQuantitySelection] = useState<number>(1);
 
   const inputTitleClasses = "font-dmSans font-semibold text-medium mt-6";
 
-  const totalPrice =
-    (productData.attributes.price +
-      sizeSelection.attributes.fee +
-      colorSelection.attributes.fee) *
-    quantitySelection;
+  const fees =
+    (sizeSelection?.attributes?.fee ? sizeSelection?.attributes?.fee : 0) +
+    (colorSelection?.attributes?.fee ? colorSelection?.attributes?.fee : 0);
+
+  const totalPrice = (productData.attributes.price + fees) * quantitySelection;
 
   const discountedPrice =
     totalPrice - totalPrice * (productData.attributes.discountPercent / 100);
@@ -83,7 +83,7 @@ export default function ProductForm(props: { productData: Product }) {
                   key={size.attributes.name}
                   className={clsx(
                     "mb-1 mr-3 h-7 rounded-lg border-1.5 border-black px-3 text-xs",
-                    size.id === sizeSelection.id &&
+                    size.id === sizeSelection?.id &&
                       "border-none bg-highlightYellow",
                   )}
                 >
@@ -97,7 +97,7 @@ export default function ProductForm(props: { productData: Product }) {
 
       {/* Price Display */}
       <div className={inputTitleClasses}>Total Price</div>
-      <div className="my-3 flex justify-between flex-wrap">
+      <div className="my-3 flex flex-wrap justify-between">
         <div>
           <div className="flex">
             <span className="font-dmSans text-3xl font-semibold">
@@ -128,7 +128,6 @@ export default function ProductForm(props: { productData: Product }) {
             value={quantitySelection + ""}
             type="number"
             onChange={(e) => {
-              console.log(e.target.value.replace(/^0+/, ""));
               let parsedQuantity = parseInt(
                 e.target.value.replace(/^0+/, "") === ""
                   ? "0"
@@ -184,7 +183,7 @@ export default function ProductForm(props: { productData: Product }) {
               ),
             });
           }}
-          className="font-dmSans flex items-center justify-center rounded-xl bg-highlightYellow px-6 py-3 font-semibold"
+          className="flex items-center justify-center rounded-xl bg-highlightYellow px-6 py-3 font-dmSans font-semibold"
         >
           <span className="icon-[heroicons--shopping-bag] mr-2 size-5"></span>
           Add to Cart

@@ -10,7 +10,7 @@ export interface ProductColor {
     createdAt: Date;    updatedAt: Date;    publishedAt?: Date;    name: string;
     hex: string;
     fee: number;
-    product?: { data: Product };
+    products?: { data: Product[] };
   };
 }
 export interface ProductColor_Plain {
@@ -18,7 +18,7 @@ export interface ProductColor_Plain {
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
   hex: string;
   fee: number;
-  product?: Product_Plain;
+  products?: Product_Plain[];
 }
 
 export interface ProductColor_NoRelations {
@@ -26,7 +26,7 @@ export interface ProductColor_NoRelations {
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
   hex: string;
   fee: number;
-  product?: number;
+  products?: number[];
 }
 
 export interface ProductColor_AdminPanelLifeCycle {
@@ -34,5 +34,5 @@ export interface ProductColor_AdminPanelLifeCycle {
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  name: string;
   hex: string;
   fee: number;
-  product?: AdminPanelRelationPropertyModification<Product_Plain>;
+  products?: AdminPanelRelationPropertyModification<Product_Plain>;
 }

@@ -22,9 +22,9 @@
       "required": true,
       "default": 0
     },
-    "product": {
+    "products": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::product.product",
       "inversedBy": "product_sizes"
     }

@@ -2,6 +2,7 @@ import { Product } from "@apiTypes/product/content-types/product/product";
 import { fetchAPI } from "@/src/app/_utils/strapiApi";
 import ProductImages from "./_components/ProductImages";
 import ProductForm from "./_components/ProductForm";
+import { notFound } from "next/navigation";
 
 export default async function Product(props: { params: { product: string } }) {
   "use server";
@@ -12,6 +13,8 @@ export default async function Product(props: { params: { product: string } }) {
       populate: "images,product_sizes,product_colors",
     })
   ).data[0];
+
+  if(!productData) return notFound();
 
   return (
     <div className="flex flex-col md:flex-row">
