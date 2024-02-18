@@ -15,7 +15,7 @@ import {
 } from "nuqs";
 import useSWR from "swr";
 import { buildStrapiRequest, fetchAPIClient } from "@/src/app/_utils/strapiApi";
-import Product from "./Product";
+import Product from "./ProductListItem";
 
 export default function ProductList(props: {
   category: Category;
@@ -55,7 +55,7 @@ export default function ProductList(props: {
 
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  const { requestUrl, mergedOptions } = buildStrapiRequest("/products", {
+  let options = {
     filters: {
       ...(props.category.attributes.slug != "all"
         ? {
@@ -104,7 +104,7 @@ export default function ProductList(props: {
       page: page,
     },
     populate: "images",
-  });
+  };
 
   type MetaData = {
     pagination: {
@@ -115,10 +115,26 @@ export default function ProductList(props: {
     };
   };
 
-  const { data, error, isLoading } = useSWR<{
+  const { requestUrl, mergedOptions } = buildStrapiRequest(
+    "/products",
+    options,
+  );
+
+  const { data, error } = useSWR<{
     data: ProductResponse[];
     meta: MetaData;
   }>(requestUrl, (url: any) => fetchAPIClient(url, mergedOptions));
+
+  // use SWR's caching to fetch the next page of products ahead of time.
+  options.pagination.page = page + 1;
+  const nextPage = buildStrapiRequest("/products", options);
+
+  useSWR<{
+    data: ProductResponse[];
+    meta: MetaData;
+  }>(nextPage.requestUrl, (url: any) =>
+    fetchAPIClient(url, nextPage.mergedOptions),
+  );
 
   useEffect(() => {
     setProducts(data?.data);
@@ -153,9 +169,7 @@ export default function ProductList(props: {
   return (
     <div>
       {/* Filter List */}
-      <div
-        className="absolute h-[calc(32rem+14rem)] w-[17rem] rounded-3xl bg-white p-5"
-      >
+      <div className="absolute h-[calc(32rem+14rem)] w-[17rem] overflow-y-scroll rounded-3xl bg-white p-5">
         <div className="mb-5 flex gap-4 font-dmSans text-xl font-semibold">
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-black">
             <span className="icon-[mdi--filter] text-white"></span>
@@ -169,6 +183,7 @@ export default function ProductList(props: {
               tags={tagsCombined.filter((tag) =>
                 selectedTags?.includes(tag.attributes.name),
               )}
+              withX={true}
             ></TagList>
           </div>
         </div>
@@ -236,33 +251,53 @@ export default function ProductList(props: {
           {/* Category Banner */}
           <div className="mb-5 mt-5 flex h-56 w-full items-center rounded-3xl bg-black pb-4 pt-4 text-white">
             <Suspense fallback={bannerTextColored}>
-              <Marquee className="overflow-y-clip align-middle font-alumniSans text-5xl font-gigabold">
-                {[1, 2, 3, 4].map((id) => (
-                  <span key={id}>
-                    {bannerTextColored}
-                    <span className="px-5 text-highlightYellow">✦&nbsp;</span>
-                  </span>
-                ))}
+              <Marquee
+                autoFill={true}
+                className="overflow-y-clip align-middle font-alumniSans text-5xl font-gigabold"
+              >
+                <span>
+                  {bannerTextColored}
+                  <span className="px-5 text-highlightYellow">✦&nbsp;</span>
+                </span>
               </Marquee>
             </Suspense>
           </div>
         </div>
         {/* Product List */}
-        <div className="flex flex-wrap justify-center gap-5">
-          <div className={`invisible h-[32rem] w-64`}></div>
-          {products
-            ? products.map((product) => {
-                return (
-                  <Product
-                    key={product.attributes.slug}
-                    product={product}
-                  ></Product>
-                );
-              })
-            : props.children.slice(1, props.children.length)}
-        </div>
+        {products?.length ? (
+          <div className="flex flex-wrap justify-center gap-5">
+            <div className={`invisible h-[32rem] w-64`}></div>
+            {products
+              ? products.map((product) => {
+                  return (
+                    <Product
+                      key={product.attributes.slug}
+                      product={product}
+                    ></Product>
+                  );
+                })
+              : props.children.slice(1, props.children.length)}
+          </div>
+        ) : (
+          <div className="ml-64 flex h-[28rem] items-center justify-center text-center">
+            <div className="flex w-fit flex-col gap-6">
+              <div className="text-2xl font-bold">Oh No!</div>
+              <div className="text-large">
+                No products match your search criteria...
+              </div>
+              <Button
+                onClick={() => {
+                  setSearchTerm(null);
+                  setSelectedTags([]);
+                }}
+              >
+                Clear Filters
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
-      <div className="flex items-center">
+      <div className="mx-auto mt-24 flex w-fit items-center justify-center rounded-lg bg-white p-2">
         <Button
           size="sm"
           onClick={() => {
@@ -277,7 +312,35 @@ export default function ProductList(props: {
         >
           Prev
         </Button>
-        {page}
+        <div className="mx-3 flex gap-3">
+          <div className="hidden gap-1 md:flex">
+            {page > 4 && (
+              <>
+                <PageButton page={1}></PageButton>
+                <span className="font-bold tracking-widest">...</span>
+              </>
+            )}
+            {page > 2 && <PageButton page={page - 2}></PageButton>}
+            {page > 1 && <PageButton page={page - 1}></PageButton>}
+          </div>
+          <div className="rounded-sm border-1 border-black bg-highlightYellow px-3 py-1 font-bold">
+            {page}
+          </div>
+          <div className="hidden gap-1 md:flex">
+            {totalPages >= page + 1 && (
+              <PageButton page={page + 1}></PageButton>
+            )}
+            {totalPages >= page + 2 && (
+              <PageButton page={page + 2}></PageButton>
+            )}
+            {page < totalPages - 4 && page != totalPages && (
+              <>
+                <span className="font-bold tracking-widest">...</span>
+                <PageButton page={totalPages}></PageButton>
+              </>
+            )}
+          </div>
+        </div>
         <Button
           size="sm"
           onClick={() => {
@@ -296,9 +359,17 @@ export default function ProductList(props: {
     </div>
   );
 
-  function TagList(props: { tags: ProductTag[] }) {
-    const isActive = true; //TODO isActive = selectedTags.includes(tag)
-
+  function PageButton(props: { page: number }) {
+    return (
+      <div
+        onClick={() => setPage(props.page)}
+        className="flex min-w-9 cursor-pointer items-center justify-center rounded-sm border-1 border-black py-1 font-bold hover:border-transparent hover:bg-highlightYellow"
+      >
+        {props.page}
+      </div>
+    );
+  }
+  function TagList(props: { tags: ProductTag[]; withX?: boolean }) {
     return (
       <div className="mb-5 mt-3 flex flex-wrap gap-3 overflow-x-auto">
         {props.tags.map((tag) => (
@@ -318,10 +389,10 @@ export default function ProductList(props: {
                 setSelectedTags(selectedTags.concat(tagName));
               }
             }}
-            className={`flex max-h-8 w-fit cursor-pointer items-center justify-center rounded-full border-1.5 border-black p-1 px-3 text-small font-light ${isActive ? "border-none bg-black text-white" : ""}`}
+            className={`flex max-h-8 w-fit cursor-pointer items-center justify-center rounded-full border-1.5 border-black p-1.5 px-4 text-small font-semibold ${selectedTags?.includes(tag.attributes.name) ? "border-none bg-black text-white" : ""}`}
           >
             {tag.attributes.displayName}
-            {isActive && (
+            {props.withX && (
               <div className="ml-2 flex items-center justify-center">
                 <span className="icon-[material-symbols-light--close] h-4 w-4 text-white"></span>
               </div>

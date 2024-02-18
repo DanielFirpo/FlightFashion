@@ -13,7 +13,7 @@ export default async function Navbar() {
   ).data;
 
   return (
-    <div className="flex justify-evenly items-center sm:items-start text-center gap-5 mt-40 flex-col sm:flex-row sm:text-left">
+    <div className="flex justify-evenly items-center sm:items-start text-center gap-5 mt-40 flex-col sm:flex-row sm:text-left w-full">
       {/* Title/Slogan */}
       <div className="flex max-w-72 flex-col">
         <span className={"font-alumniSans font-gigabold mb-4 text-7xl"}>

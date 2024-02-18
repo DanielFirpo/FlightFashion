@@ -97,66 +97,68 @@ export default function ProductForm(props: { productData: Product }) {
 
       {/* Price Display */}
       <div className={inputTitleClasses}>Total Price</div>
-      <div className="my-3 flex flex-wrap justify-between">
-        <div>
-          <div className="flex">
-            <span className="font-dmSans text-3xl font-semibold">
-              {priceFormatter.format(discountedPrice)}
-            </span>
-            <div
-              className="relative ml-3 mt-3 text-subtitleText before:absolute before:top-2.5
-                     before:w-full before:-rotate-6 before:border-t-1.5 before:border-red-600"
-            >
-              {priceFormatter.format(totalPrice)}
+      <div className="flex max-w-[30rem]">
+        <div className="my-3 flex flex-wrap justify-between w-full">
+          <div>
+            <div className="flex">
+              <span className="font-dmSans text-3xl font-semibold">
+                {priceFormatter.format(discountedPrice)}
+              </span>
+              <div
+                className="relative ml-3 mt-3 text-subtitleText before:absolute before:top-2.5
+                       before:w-full before:-rotate-6 before:border-t-1.5 before:border-red-600"
+              >
+                {priceFormatter.format(totalPrice)}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Quantity Selector */}
-        <div className="flex">
-          <button
-            onClick={() =>
-              setQuantitySelection(
-                quantitySelection - 1 < 1 ? 1 : quantitySelection - 1,
-              )
-            }
-            className="h-7 w-7 rounded-lg bg-black text-center text-white"
-          >
-            <span className="icon-[ph--arrow-left-bold] mb-0.5 size-4 align-middle"></span>
-          </button>
-          <input
-            value={quantitySelection + ""}
-            type="number"
-            onChange={(e) => {
-              let parsedQuantity = parseInt(
-                e.target.value.replace(/^0+/, "") === ""
-                  ? "0"
-                  : e.target.value.replace(/^0+/, ""),
-                10,
-              );
-              parsedQuantity = parsedQuantity > 1000 ? 1000 : parsedQuantity;
-              parsedQuantity = parsedQuantity < 1 ? 1 : parsedQuantity;
+          {/* Quantity Selector */}
+          <div className="flex justify-between">
+            <button
+              onClick={() =>
+                setQuantitySelection(
+                  quantitySelection - 1 < 1 ? 1 : quantitySelection - 1,
+                )
+              }
+              className="h-7 w-7 rounded-lg bg-black text-center text-white"
+            >
+              <span className="icon-[ph--arrow-left-bold] mb-0.5 size-4 align-middle"></span>
+            </button>
+            <input
+              value={quantitySelection + ""}
+              type="number"
+              onChange={(e) => {
+                let parsedQuantity = parseInt(
+                  e.target.value.replace(/^0+/, "") === ""
+                    ? "0"
+                    : e.target.value.replace(/^0+/, ""),
+                  10,
+                );
+                parsedQuantity = parsedQuantity > 1000 ? 1000 : parsedQuantity;
+                parsedQuantity = parsedQuantity < 1 ? 1 : parsedQuantity;
 
-              setQuantitySelection(parsedQuantity);
-            }}
-            className="mx-1.5 flex h-7 min-w-7 items-center justify-center rounded-lg border-1.5 border-black
-                 bg-transparent px-0.5 text-center text-sm focus:outline-none"
-            style={{
-              width: 10 + quantitySelection.toString().length * 9 + "px",
-            }}
-          ></input>
-          <button
-            onClick={() =>
-              setQuantitySelection(
-                quantitySelection + 1 > 1000
-                  ? quantitySelection
-                  : quantitySelection + 1,
-              )
-            }
-            className="h-7 w-7 rounded-lg bg-black text-center text-white"
-          >
-            <span className="icon-[ph--arrow-right-bold] mb-0.5 size-4 align-middle"></span>
-          </button>
+                setQuantitySelection(parsedQuantity);
+              }}
+              className="mx-1.5 flex h-7 min-w-7 items-center justify-center rounded-lg border-1.5 border-black
+                   bg-transparent px-0.5 text-center text-sm focus:outline-none"
+              style={{
+                width: 10 + quantitySelection.toString().length * 9 + "px",
+              }}
+            ></input>
+            <button
+              onClick={() =>
+                setQuantitySelection(
+                  quantitySelection + 1 > 1000
+                    ? quantitySelection
+                    : quantitySelection + 1,
+                )
+              }
+              className="h-7 w-7 rounded-lg bg-black text-center text-white"
+            >
+              <span className="icon-[ph--arrow-right-bold] mb-0.5 size-4 align-middle"></span>
+            </button>
+          </div>
         </div>
       </div>
 

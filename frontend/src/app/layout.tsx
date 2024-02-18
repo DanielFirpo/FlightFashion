@@ -8,14 +8,14 @@ const dmSans = DM_Sans({
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
   variable: "--font-dm-sans",
-  subsets: ["latin"]
+  subsets: ["latin"],
 });
 
 const alumniSans = Alumni_Sans({
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
   variable: "--font-alumni-sans",
-  subsets: ["latin"]
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -28,10 +28,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
-    <html lang="en" className={`${dmSans.variable} ${alumniSans.variable}`}>
-      <body className="font-dmSans min-w-screen min-h-screen bg-backgroundGray px-10 pb-10 pt-5">
+    <html
+      lang="en"
+      className={`${dmSans.variable} ${alumniSans.variable} bg-imageBackground`}
+    >
+      <body className="mx-auto min-h-screen max-w-[1366px] items-center bg-backgroundGray px-10 pb-10 pt-5 font-dmSans">
         <Navbar></Navbar>
         <div className="min-h-96">{children}</div>
         <Footer></Footer>

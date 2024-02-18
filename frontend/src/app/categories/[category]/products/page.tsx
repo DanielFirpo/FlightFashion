@@ -3,7 +3,7 @@ import CategoryCarousel from "./_components/CategoryCarousel";
 import ProductList from "./_components/ProductList";
 import { ProductsPage } from "@apiTypes/products-page/content-types/products-page/products-page";
 import { Category } from "@apiTypes/category/content-types/category/category";
-import Product from "./_components/Product";
+import Product from "./_components/ProductListItem";
 import { Product as ProductResponse } from "@apiTypes/product/content-types/product/product";
 import { notFound } from "next/navigation";
 

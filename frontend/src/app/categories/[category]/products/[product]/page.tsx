@@ -3,10 +3,9 @@ import { fetchAPI } from "@/src/app/_utils/strapiApi";
 import ProductImages from "./_components/ProductImages";
 import ProductForm from "./_components/ProductForm";
 import { notFound } from "next/navigation";
+import BackButton from "./_components/BackButton";
 
 export default async function Product(props: { params: { product: string } }) {
-  "use server";
-
   const productData: Product = (
     await fetchAPI("/products", {
       filters: { slug: props.params.product },
@@ -14,31 +13,34 @@ export default async function Product(props: { params: { product: string } }) {
     })
   ).data[0];
 
-  if(!productData) return notFound();
+  if (!productData) return notFound();
 
   return (
-    <div className="flex flex-col md:flex-row">
-      {/* Right Half Images */}
-      <ProductImages
-        images={productData.attributes?.images?.data}
-      ></ProductImages>
+    <>
+      <BackButton></BackButton>
+      <div className="flex flex-col items-center gap-14 lg:flex-row lg:items-start">
+        {/* Right Half Images */}
+        <ProductImages
+          images={productData.attributes?.images?.data}
+        ></ProductImages>
 
-      {/* Left Half Title, Description */}
-      <div className="ml-0 mt-4 md:mt-0 md:ml-14 flex w-full flex-col">
-        {productData.attributes.isBestSeller ? (
-          <div className="text-medium text-subtitleText">Best Seller</div>
-        ) : null}
+        {/* Left Half Title, Description, Form */}
+        <div className="flex w-full flex-col">
+          {productData.attributes.isBestSeller ? (
+            <div className="text-medium text-subtitleText">Best Seller</div>
+          ) : null}
 
-        <div className="font-alumniSans font-gigabold mb-6 text-6xl">
-          {productData.attributes.name}
+          <div className="mb-6 font-alumniSans text-6xl font-gigabold">
+            {productData.attributes.name}
+          </div>
+
+          <div className="text-sm text-subtitleText">
+            {productData.attributes.description}
+          </div>
+
+          <ProductForm productData={productData}></ProductForm>
         </div>
-
-        <div className="text-sm text-subtitleText">
-          {productData.attributes.description}
-        </div>
-
-        <ProductForm productData={productData}></ProductForm>
       </div>
-    </div>
+    </>
   );
 }
