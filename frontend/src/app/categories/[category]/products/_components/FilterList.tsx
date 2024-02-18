@@ -6,6 +6,7 @@ export default function Product(props: {
   pageData: ProductsPage;
   selectedTags: string[] | null;
   setSelectedTags: Function;
+  resetPagination: Function;
 }) {
   const tagsCombined = props.pageData.attributes.filter_list_1.data.concat(
     props.pageData.attributes.filter_list_2.data,
@@ -70,6 +71,7 @@ export default function Product(props: {
           <div
             key={tag.attributes.displayName}
             onClick={() => {
+              props.resetPagination();
               //first tag
               const tagName = tag.attributes.name;
               if (!props.selectedTags?.length) {
@@ -78,9 +80,10 @@ export default function Product(props: {
               }
 
               function listIncludesTag(tagList: ProductTag[], tag: string) {
-                return tagList.filter(
-                  (listTag) => listTag.attributes.name === tag,
-                ).length > 0;
+                return (
+                  tagList.filter((listTag) => listTag.attributes.name === tag)
+                    .length > 0
+                );
               }
 
               //toggle tag selected

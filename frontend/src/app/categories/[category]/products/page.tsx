@@ -28,10 +28,9 @@ export default async function Products(props: {
 
   const currentCategory = categories.filter(
     (cat) =>
-      props.params.category.toLowerCase() ===
-      cat.attributes.name.toLowerCase(),
-  )[0]
-  if(!currentCategory) return notFound();
+      props.params.category.toLowerCase() === cat.attributes.name.toLowerCase(),
+  )[0];
+  if (!currentCategory) return notFound();
 
   //We fetch products here and in ProductList, it's not redundant though.
   //This one is so that when the page arrives on the client's browser they
@@ -68,12 +67,7 @@ export default async function Products(props: {
           category={props.params.category}
           categories={categories}
         ></CategoryCarousel>
-        <p></p>
-        {/* {products.map((product) => {
-          return (
-            <Product key={product.attributes.slug} product={product}></Product>
-          );
-        })} */}
+        <></>
       </ProductList>
     </>
   );

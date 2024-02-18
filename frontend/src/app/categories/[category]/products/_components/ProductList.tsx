@@ -53,6 +53,11 @@ export default function ProductList(props: {
 
   const [totalPages, setTotalPages] = useState<number>(1);
 
+  function resetPagination() {
+    setPage(1);
+    setTotalPages(1);
+  }
+
   let options = {
     filters: {
       ...(props.category.attributes.slug != "all"
@@ -118,7 +123,7 @@ export default function ProductList(props: {
     options,
   );
 
-  const { data, error } = useSWR<{
+  const { data, error, isLoading } = useSWR<{
     data: ProductResponse[];
     meta: MetaData;
   }>(requestUrl, (url: any) => fetchAPIClient(url, mergedOptions));
@@ -164,6 +169,7 @@ export default function ProductList(props: {
         pageData={props.pageData}
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
+        resetPagination={resetPagination}
       ></FilterList>
 
       <div className="flex flex-col">
@@ -174,7 +180,10 @@ export default function ProductList(props: {
               <span className="icon-[ion--search] ml-5 h-6 w-6"></span>
               <input
                 onKeyDown={(e) => {
-                  if (e.key == "Enter") setSearchTerm(searchInput);
+                  if (e.key == "Enter") {
+                    setSearchTerm(searchInput);
+                    resetPagination();
+                  }
                 }}
                 onChange={(e) => setSearchInput(e.target.value)}
                 value={searchInput}
@@ -185,6 +194,7 @@ export default function ProductList(props: {
                 onClick={() => {
                   setSearchInput("");
                   setSearchTerm(null);
+                  resetPagination();
                 }}
                 className="icon-[material-symbols-light--close] mr-5 h-7 w-7 cursor-pointer text-black"
               ></span>
@@ -192,6 +202,7 @@ export default function ProductList(props: {
             <Button
               onClick={() => {
                 setSearchTerm(searchInput);
+                resetPagination();
               }}
               variant="hightlighted"
               size="lg"
@@ -221,7 +232,7 @@ export default function ProductList(props: {
         </div>
 
         {/* Product List */}
-        {products?.length ? (
+        {products?.length && !isLoading ? (
           <div className="flex flex-wrap justify-center gap-5">
             <div className={`invisible h-[32rem] w-64`}></div>
             {products
@@ -246,6 +257,7 @@ export default function ProductList(props: {
                 onClick={() => {
                   setSearchTerm(null);
                   setSelectedTags([]);
+                  resetPagination();
                 }}
               >
                 Clear Filters
