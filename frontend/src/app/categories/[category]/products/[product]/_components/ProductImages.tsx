@@ -22,7 +22,7 @@ export default function ProductImages(props: any) {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="flex w-[30rem] justify-center overflow-hidden">
+      <div className="flex w-full md:w-[30rem] justify-center overflow-hidden">
         <Dialog>
           <DialogTrigger>
             <img

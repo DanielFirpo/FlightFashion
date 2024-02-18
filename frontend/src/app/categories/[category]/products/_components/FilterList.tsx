@@ -1,5 +1,6 @@
 import { ProductTag } from "@apiTypes/product-tag/content-types/product-tag/product-tag";
 import { ProductsPage } from "@apiTypes/products-page/content-types/products-page/products-page";
+import { useEffect } from "react";
 
 export default function Product(props: {
   pageData: ProductsPage;
@@ -25,12 +26,20 @@ export default function Product(props: {
       <div className="flex flex-col">
         <div className={filterTitleClasses}>Applied Filters</div>
         <div className="flex min-h-32 flex-wrap">
-          <TagList
-            tags={tagsCombined.filter((tag) =>
-              props.selectedTags?.includes(tag.attributes.name),
-            )}
-            withX={true}
-          ></TagList>
+          {props.selectedTags?.length ? (
+            <TagList
+              tags={tagsCombined.filter((tag) =>
+                props.selectedTags?.includes(tag.attributes.name),
+              )}
+              withX={true}
+            ></TagList>
+          ) : (
+            <div
+              className={`mt-3 flex max-h-8 w-fit cursor-pointer items-center justify-center rounded-full border-1.5 border-none border-black bg-black p-1.5 px-4 text-small font-semibold text-white`}
+            >
+              No Filters
+            </div>
+          )}
         </div>
       </div>
       <div>
@@ -61,10 +70,17 @@ export default function Product(props: {
           <div
             key={tag.attributes.displayName}
             onClick={() => {
+              //first tag
               const tagName = tag.attributes.name;
               if (!props.selectedTags?.length) {
                 props.setSelectedTags([tagName]);
                 return;
+              }
+
+              function listIncludesTag(tagList: ProductTag[], tag: string) {
+                return tagList.filter(
+                  (listTag) => listTag.attributes.name === tag,
+                ).length > 0;
               }
 
               //toggle tag selected
@@ -73,7 +89,22 @@ export default function Product(props: {
                   props.selectedTags.filter((tag) => tag !== tagName),
                 );
               } else {
-                props.setSelectedTags(props.selectedTags.concat(tagName));
+                //Do not allow multiple active tag filters from the same filter category
+                //if there are already some selected tags of the same tag category, replace them with new tag
+                [
+                  props.pageData.attributes.filter_list_1.data,
+                  props.pageData.attributes.filter_list_2.data,
+                  props.pageData.attributes.filter_list_3.data,
+                ].forEach((filterList) => {
+                  if (listIncludesTag(filterList, tagName)) {
+                    const list = props.selectedTags!.filter(
+                      (selectedTag) =>
+                        !listIncludesTag(filterList, selectedTag),
+                    );
+                    list.push(tagName);
+                    props.setSelectedTags(list);
+                  }
+                });
               }
             }}
             className={`flex max-h-8 w-fit cursor-pointer items-center justify-center rounded-full border-1.5 border-black p-1.5 px-4 text-small font-semibold ${props.selectedTags?.includes(tag.attributes.name) ? "border-none bg-black text-white" : ""}`}
