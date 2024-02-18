@@ -17,7 +17,7 @@ export default function Product(props: {
     "font-dmSans text-md font-semibold text-subtitleText";
 
   return (
-    <div className="absolute h-[calc(32rem+14rem)] w-[17rem] overflow-y-auto rounded-3xl bg-white p-5">
+    <div className="md:absolute md:h-[calc(32rem+14rem)] md:w-[17rem] overflow-y-auto rounded-3xl bg-white p-5">
       <div className="mb-5 flex gap-4 font-dmSans text-xl font-semibold">
         <div className="flex h-7 w-7 items-center justify-center rounded-full bg-black">
           <span className="icon-[mdi--filter] text-white"></span>
@@ -26,7 +26,7 @@ export default function Product(props: {
       </div>
       <div className="flex flex-col">
         <div className={filterTitleClasses}>Applied Filters</div>
-        <div className="flex min-h-32 flex-wrap">
+        <div className="flex min-h-16 md:min-h-32 flex-wrap">
           {props.selectedTags?.length ? (
             <TagList
               tags={tagsCombined.filter((tag) =>

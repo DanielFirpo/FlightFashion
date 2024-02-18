@@ -175,7 +175,7 @@ export default function ProductList(props: {
       ></FilterList>
 
       <div className="flex flex-col">
-        <div className="ml-auto flex h-56 w-[calc(100%-18rem)] flex-col items-end pl-5">
+        <div className="md:ml-auto flex h-56 md:w-[calc(100%-18rem)] flex-col items-end md:pl-5 pt-7 md:pt-0">
           {/* Search Bar */}
           <div className="flex w-full">
             <div className="mr-4 flex w-full items-center justify-center rounded-full border-1.5 border-black">
@@ -235,8 +235,8 @@ export default function ProductList(props: {
 
         {/* Product List */}
         {products?.length || isLoading ? (
-          <div className="flex flex-wrap justify-center gap-5">
-            <div className={`invisible h-[32rem] w-64`}></div>
+          <div className="flex flex-wrap justify-center gap-5 mt-10 md:mt-0">
+            <div className="invisible h-[32rem] w-64 hidden md:inline-block"></div>
             {products
               ? products.map((product) => {
                   return (
@@ -249,7 +249,7 @@ export default function ProductList(props: {
               : props.children.slice(1, props.children.length)}
           </div>
         ) : (
-          <div className="ml-64 flex h-[28rem] items-center justify-center text-center">
+          <div className="md:ml-64 flex h-[28rem] items-center justify-center text-center">
             <div className="flex w-fit flex-col gap-6">
               <div className="text-2xl font-bold">Oh No!</div>
               <div className="text-large">
