@@ -234,7 +234,7 @@ export default function ProductList(props: {
         </div>
 
         {/* Product List */}
-        {products?.length && !isLoading ? (
+        {products?.length || isLoading ? (
           <div className="flex flex-wrap justify-center gap-5">
             <div className={`invisible h-[32rem] w-64`}></div>
             {products

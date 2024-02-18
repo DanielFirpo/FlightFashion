@@ -31,6 +31,8 @@ export default function ProductImages(props: any) {
           <DialogTrigger>
             <div>
               <Image
+                width={selectedImage.attributes.width}
+                height={selectedImage.attributes.height}
                 alt={selectedImage.attributes.alternativeText}
                 className="aspect-square cursor-zoom-in rounded-3xl bg-imageBackground transition-all hover:scale-125"
                 src={getImageURLBySize(selectedImage, "large") ?? noImage}
@@ -40,6 +42,8 @@ export default function ProductImages(props: any) {
           {/* TODO: fix UI shift on dialog open */}
           <DialogContent className="h-[100vh-10rem] min-w-fit">
             <Image
+              width={selectedImage.attributes.width}
+              height={selectedImage.attributes.height}
               alt={selectedImage.attributes.alternativeText}
               className="mx-auto aspect-square h-full rounded-3xl bg-imageBackground"
               src={getImageURLBySize(selectedImage, "large") ?? noImage}
@@ -61,6 +65,8 @@ export default function ProductImages(props: any) {
                     className="max-w-40 basis-auto cursor-pointer"
                   >
                     <Image
+                      width={image.attributes.width}
+                      height={image.attributes.height}
                       alt={image.attributes.alternativeText}
                       onClick={() => setSelectedImage(image)}
                       className={clsx(
@@ -82,6 +88,8 @@ export default function ProductImages(props: any) {
               return (
                 <div key={image.attributes.hash}>
                   <Image
+                    width={image.attributes.width}
+                    height={image.attributes.height}
                     alt={image.attributes.alternativeText}
                     className="max-w-40 rounded-xl bg-imageBackground"
                     src={getImageURLBySize(image!, "small") ?? noImage}
