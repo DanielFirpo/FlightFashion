@@ -14,7 +14,7 @@ export default async function Product(props: { params: { product: string } }) {
   ).data[0];
 
   if (!productData) return notFound();
-
+    
   return (
     <>
       <BackButton></BackButton>
