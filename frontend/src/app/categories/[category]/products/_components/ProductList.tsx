@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Button } from "@/src/app/_components/shadcn/button";
@@ -58,6 +59,7 @@ export default function ProductList(props: {
     setTotalPages(1);
   }
 
+  //TODO: implement fuzzy search in strapi
   let options = {
     filters: {
       ...(props.category.attributes.slug != "all"
