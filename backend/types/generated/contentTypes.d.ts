@@ -781,6 +781,56 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiAboutPageAboutPage extends Schema.SingleType {
+  collectionName: 'about_pages';
+  info: {
+    singularName: 'about-page';
+    pluralName: 'about-pages';
+    displayName: 'About Page';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    heroTitle: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'About Us'>;
+    heroSubtitle: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'Flight Fashion brings you cutting-edge designs and timeless classics to elevate your everyday wardrobe.'>;
+    heroImage: Attribute.Media & Attribute.Required;
+    leftImage1: Attribute.Media & Attribute.Required;
+    leftImage2: Attribute.Media & Attribute.Required;
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<"Style and sophistication at an affordable cost is what we're about.">;
+    link: Attribute.Relation<
+      'api::about-page.about-page',
+      'oneToOne',
+      'api::link.link'
+    >;
+    description: Attribute.Text &
+      Attribute.Required &
+      Attribute.DefaultTo<"At Flight Fashion, we're passionate about redefining urban fashion with a focus on style, sophistication, and versatility.\\nOur journey began with a vision to curate a collection of clothing and accessories that embody the spirit of contemporary city life.\\n\\nFrom sleek streetwear to elegant essentials, we strive to offer a diverse range of options that empower individuals to express their unique sense of style.\\nWith a keen eye for quality craftsmanship and design, we carefully select each piece to ensure both comfort and durability without compromising on aesthetics.\\n\\nWhether you're navigating the bustling streets or attending a high-profile event, our curated selection is designed to seamlessly blend fashion-forward trends with timeless classics.\\nAs advocates for inclusivity and self-expression, we embrace diversity in all its forms and celebrate the individuality of our customers.\\n\\nOur commitment to excellence extends beyond our products; we pride ourselves on providing exceptional customer service and fostering meaningful connections with our community.\\nJoin us on our journey as we continue to inspire and elevate urban fashion to new heights.\\nSo what are you waiting for?">;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::about-page.about-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::about-page.about-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiCategoryCategory extends Schema.CollectionType {
   collectionName: 'categories';
   info: {
@@ -1290,6 +1340,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::about-page.about-page': ApiAboutPageAboutPage;
       'api::category.category': ApiCategoryCategory;
       'api::footer.footer': ApiFooterFooter;
       'api::homepage.homepage': ApiHomepageHomepage;

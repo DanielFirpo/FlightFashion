@@ -1,0 +1,74 @@
+{
+  "kind": "singleType",
+  "collectionName": "about_pages",
+  "info": {
+    "singularName": "about-page",
+    "pluralName": "about-pages",
+    "displayName": "About Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroTitle": {
+      "type": "string",
+      "required": true,
+      "default": "About Us"
+    },
+    "heroSubtitle": {
+      "type": "string",
+      "required": true,
+      "default": "Flight Fashion brings you cutting-edge designs and timeless classics to elevate your everyday wardrobe."
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "leftImage1": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "leftImage2": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "default": "Style and sophistication at an affordable cost is what we're about.",
+      "required": true
+    },
+    "link": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::link.link"
+    },
+    "description": {
+      "type": "text",
+      "required": true,
+      "default": "At Flight Fashion, we're passionate about redefining urban fashion with a focus on style, sophistication, and versatility.\\nOur journey began with a vision to curate a collection of clothing and accessories that embody the spirit of contemporary city life.\\n\\nFrom sleek streetwear to elegant essentials, we strive to offer a diverse range of options that empower individuals to express their unique sense of style.\\nWith a keen eye for quality craftsmanship and design, we carefully select each piece to ensure both comfort and durability without compromising on aesthetics.\\n\\nWhether you're navigating the bustling streets or attending a high-profile event, our curated selection is designed to seamlessly blend fashion-forward trends with timeless classics.\\nAs advocates for inclusivity and self-expression, we embrace diversity in all its forms and celebrate the individuality of our customers.\\n\\nOur commitment to excellence extends beyond our products; we pride ourselves on providing exceptional customer service and fostering meaningful connections with our community.\\nJoin us on our journey as we continue to inspire and elevate urban fashion to new heights.\\nSo what are you waiting for?"
+    }
+  }
+}
