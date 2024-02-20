@@ -45,7 +45,7 @@ export default function Page() {
             id: { $eq: -1 },
           }),
     },
-    populate: "images,colors,sizes",
+    populate: "images,product_colors,product_sizes",
   });
 
   const { data, error, isLoading } = useSWR<{
@@ -78,28 +78,29 @@ export default function Page() {
       </div>
     );
 
-    let cartItemCount = 0;
+  let cartItemCount = 0;
 
-    cartItems.forEach((item) => {
-      item.variantQuantities.forEach((varient) => {
-        cartItemCount += varient.quantity;
-      });
+  cartItems.forEach((item) => {
+    item.variantQuantities.forEach((varient) => {
+      cartItemCount += varient.quantity;
     });
+  });
+
   return (
     <>
-      <div className="flex w-full justify-between mb-5 mt-12">
-        <div className="flex gap-6 items-center">
+      <div className="mb-5 mt-12 flex w-full justify-between">
+        <div className="flex items-center gap-6">
           <div className="text-xl font-gigabold">Your Cart</div>
           <div className="text-sm">{cartItemCount} Items</div>
         </div>
-        <div className="flex gap-6 items-center">
+        <div className="flex items-center gap-6">
           <div className="text-sm">Total</div>
           <div className="text-xl font-gigabold">{priceFormatter.format(cartTotal)}</div>
         </div>
       </div>
 
       {!isLoading ? (
-        <div className="flex flex-col gap-3 min-h-96">
+        <div className="flex min-h-96 flex-col gap-3">
           {data?.data.map((product) => {
             const image = product.attributes.images?.data?.[0];
 
@@ -126,8 +127,10 @@ export default function Page() {
                   </div>
                   <div className="mt-5 flex h-full w-full flex-col items-center justify-between gap-5 sm:ml-5 sm:mt-0 sm:flex-row sm:gap-2">
                     <div className="flex h-full w-full flex-col justify-between overflow-hidden sm:max-w-56">
-                      <div className="font-dmSans text-medium font-semibold line-clamp-2 break-words">{product.attributes.name}</div>
-                      <div className="text-xs text-subtitleText line-clamp-1">{product.attributes.description}</div>
+                      <div className="line-clamp-2 break-words font-dmSans text-medium font-semibold">
+                        {product.attributes.name}
+                      </div>
+                      <div className="line-clamp-1 text-xs text-subtitleText">{product.attributes.description}</div>
                     </div>
                     <div className="flex flex-wrap gap-4">
                       {/* TODO: let user adjust quantity in cart */}
@@ -175,9 +178,15 @@ export default function Page() {
         <p>loading...</p>
       )}
 
-      <div className="flex w-full justify-between mt-12">
-        <Link href="/categories/all/products"><Button size="sm"><span className="icon-[ph--arrow-left-bold] mb-0.5 mr-2 mt-0.5 size-4 align-middle"></span>Continue Shopping</Button></Link>
-        <Button variant="hightlighted" disabled={cartItemCount < 1}>Proceed to Checkout<span className="icon-[ph--arrow-right-bold] mb-0.5 ml-2 mt-0.5 size-4 align-middle"></span></Button>
+      <div className="mt-12 flex w-full justify-between">
+        <Link href="/categories/all/products">
+          <Button size="sm">
+            <span className="icon-[ph--arrow-left-bold] mb-0.5 mr-2 mt-0.5 size-4 align-middle"></span>Continue Shopping
+          </Button>
+        </Link>
+        <Button variant="hightlighted" disabled={cartItemCount < 1}>
+          Proceed to Checkout<span className="icon-[ph--arrow-right-bold] mb-0.5 ml-2 mt-0.5 size-4 align-middle"></span>
+        </Button>
       </div>
     </>
   );
