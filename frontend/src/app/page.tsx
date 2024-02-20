@@ -6,7 +6,6 @@ import saleIcon from "@/public/sale.png";
 import Image from "next/image";
 
 export default async function Home() {
-  "use server";
 
   const pageData: Homepage = (
     await fetchAPI("/homepage", {

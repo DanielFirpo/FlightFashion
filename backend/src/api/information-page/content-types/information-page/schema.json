@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "information_pages",
+  "info": {
+    "singularName": "information-page",
+    "pluralName": "information-pages",
+    "displayName": "Information Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "default": "Terms & Conditions"
+    },
+    "text": {
+      "type": "richtext",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    }
+  }
+}

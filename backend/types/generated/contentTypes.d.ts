@@ -1024,6 +1024,42 @@ export interface ApiHomepageHomepage extends Schema.SingleType {
   };
 }
 
+export interface ApiInformationPageInformationPage
+  extends Schema.CollectionType {
+  collectionName: 'information_pages';
+  info: {
+    singularName: 'information-page';
+    pluralName: 'information-pages';
+    displayName: 'Information Page';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'Terms & Conditions'>;
+    text: Attribute.RichText & Attribute.Required;
+    slug: Attribute.UID<'api::information-page.information-page', 'title'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::information-page.information-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::information-page.information-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiLinkLink extends Schema.CollectionType {
   collectionName: 'links';
   info: {
@@ -1344,6 +1380,7 @@ declare module '@strapi/types' {
       'api::category.category': ApiCategoryCategory;
       'api::footer.footer': ApiFooterFooter;
       'api::homepage.homepage': ApiHomepageHomepage;
+      'api::information-page.information-page': ApiInformationPageInformationPage;
       'api::link.link': ApiLinkLink;
       'api::navbar.navbar': ApiNavbarNavbar;
       'api::product.product': ApiProductProduct;
