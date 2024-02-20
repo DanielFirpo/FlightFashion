@@ -35,7 +35,7 @@ export default async function Home() {
           aspectRatio: "16 / 9",
         }}
       >
-        <div className="font-alumniSans font-gigabold xs:text-3xl flex w-full flex-col justify-between text-nowrap text-center sm:text-left sm:text-5xl md:text-7xl xl:text-8xl">
+        <div className="flex w-full flex-col justify-between text-nowrap text-center font-alumniSans font-gigabold xs:text-3xl sm:text-left sm:text-5xl md:text-7xl xl:text-8xl">
           <div>{firstTitleThird}</div>
           <div className="text-highlightYellow">{secondTitleThird}</div>
           <div>{thirdTitleThird}</div>
@@ -57,16 +57,23 @@ export default async function Home() {
       {/* Left Image/Right Text */}
       <div className="mt-14 flex flex-col items-center justify-center gap-14 text-center md:flex-row md:text-left">
         <div className="w-full md:w-1/2">
-          <img
+          <Image
+            width={pageData.attributes.leftHalfImage.data.attributes.width}
+            height={pageData.attributes.leftHalfImage.data.attributes.height}
+            alt={
+              pageData.attributes.leftHalfImage.data.attributes.alternativeText ?? ""
+            }
             className="rounded-3xl"
-            src={getImageURLBySize(
-              pageData.attributes.leftHalfImage.data,
-              "large",
-            )}
-          ></img>
+            src={
+              getImageURLBySize(
+                pageData.attributes.leftHalfImage.data,
+                "large",
+              ) ?? ""
+            }
+          ></Image>
         </div>
         <div className="flex w-full flex-col gap-5 md:w-1/2">
-          <div className="font-alumniSans font-gigabold text-5xl">
+          <div className="font-alumniSans text-5xl font-gigabold">
             {pageData.attributes.rightHalfTitle}
           </div>
           <div className="text-sm text-subtitleText">
@@ -101,7 +108,7 @@ export default async function Home() {
 
       {/* Wide Image */}
       <div
-        className={`font-alumniSans font-gigabold mt-14 flex min-h-44 items-center justify-center rounded-3xl bg-cover text-center text-4xl tracking-wider text-white md:text-7xl`}
+        className={`mt-14 flex min-h-44 items-center justify-center rounded-3xl bg-cover text-center font-alumniSans text-4xl font-gigabold tracking-wider text-white md:text-7xl`}
         style={{
           backgroundImage:
             'url("' +
@@ -124,11 +131,13 @@ export default async function Home() {
             aspectRatio: "16 / 9",
           }}
         >
-          <div className="flex w-full md:w-1/2 flex-col gap-4">
-            <div className="font-alumniSans font-gigabold text-2xl text-center sm:text-left sm:text-3xl md:text-5xl">
+          <div className="flex w-full flex-col gap-4 md:w-1/2">
+            <div className="text-center font-alumniSans text-2xl font-gigabold sm:text-left sm:text-3xl md:text-5xl">
               {pageData.attributes.saleImageTitle}
             </div>
-            <div className="font-bold text-xs hidden sm:inline-block sm:text-small md:text-medium md:font-normal">{pageData.attributes.saleText}</div>
+            <div className="hidden text-xs font-bold sm:inline-block sm:text-small md:text-medium md:font-normal">
+              {pageData.attributes.saleText}
+            </div>
             <Link
               className="ml-auto hidden sm:inline-block"
               href={pageData.attributes.saleButton?.data.attributes.href + ""}
@@ -137,17 +146,17 @@ export default async function Home() {
                 {pageData.attributes.saleButton?.data.attributes.text}
               </Button>
             </Link>
-            <div className="relative ml-auto mt-auto min-w-40 hidden lg:inline-block">
+            <div className="relative ml-auto mt-auto hidden min-w-40 lg:inline-block">
               <Image
                 src={saleIcon}
                 alt="A yellow star"
-                className="pointer-events-none absolute h-40 w-40 object-cover object-center fill-destructive-foreground"
+                className="pointer-events-none absolute h-40 w-40 fill-destructive-foreground object-cover object-center"
               />
-              <div className="font-dmSans z-1 relative flex h-40 w-40 flex-col items-center justify-center text-center text-medium font-bold">
+              <div className="z-1 relative flex h-40 w-40 flex-col items-center justify-center text-center font-dmSans text-medium font-bold">
                 <span>UP TO</span>
                 <span
                   style={{ color: "red" }}
-                  className="font-gigabold text-xl"
+                  className="text-xl font-gigabold"
                 >
                   {pageData.attributes.saleDiscount}
                 </span>
@@ -171,7 +180,7 @@ function InfoColumn(props: { title: string; text: string; icon: string }) {
       <div className="flex w-fit items-center justify-center rounded-full bg-black p-2">
         <span className={`${icon} h-6 w-6 text-white`}></span>
       </div>
-      <div className={"font-dmSans mb-5 mt-6 text-medium font-bold"}>
+      <div className={"mb-5 mt-6 font-dmSans text-medium font-bold"}>
         {title}
       </div>
       <div className="text-sm text-subtitleText">{text}</div>

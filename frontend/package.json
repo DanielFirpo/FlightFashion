@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "prettier": {
-    "printWidth": 80,
+    "printWidth": 130,
     "plugins": [
       "prettier-plugin-classnames",
       "prettier-plugin-tailwindcss"
@@ -35,7 +35,8 @@
     "react-fast-marquee": "^1.6.4",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "usehooks-ts": "^2.14.0"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.181",

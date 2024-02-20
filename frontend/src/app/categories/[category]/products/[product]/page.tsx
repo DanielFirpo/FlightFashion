@@ -25,16 +25,16 @@ export default async function Product(props: { params: { product: string } }) {
         ></ProductImages>
 
         {/* Left Half Title, Description, Form */}
-        <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col overflow-hidden break-words">
           {productData.attributes.isBestSeller ? (
             <div className="text-medium text-subtitleText">Best Seller</div>
           ) : null}
 
-          <div className="mb-6 font-alumniSans text-6xl font-gigabold">
+          <div className="mb-6 font-alumniSans text-6xl font-gigabold line-clamp-2">
             {productData.attributes.name}
           </div>
 
-          <div className="text-sm text-subtitleText">
+          <div className="text-sm text-subtitleText line-clamp-2">
             {productData.attributes.description}
           </div>
 

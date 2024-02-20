@@ -33,7 +33,7 @@ export default function ProductImages(props: any) {
               <Image
                 width={selectedImage.attributes.width}
                 height={selectedImage.attributes.height}
-                alt={selectedImage.attributes.alternativeText}
+                alt={selectedImage.attributes.alternativeText ?? ""}
                 className="aspect-square cursor-zoom-in rounded-3xl bg-imageBackground transition-all hover:scale-125"
                 src={getImageURLBySize(selectedImage, "large") ?? noImage}
               ></Image>
@@ -44,7 +44,7 @@ export default function ProductImages(props: any) {
             <Image
               width={selectedImage.attributes.width}
               height={selectedImage.attributes.height}
-              alt={selectedImage.attributes.alternativeText}
+              alt={selectedImage.attributes.alternativeText ?? ""}
               className="mx-auto aspect-square h-full rounded-3xl bg-imageBackground"
               src={getImageURLBySize(selectedImage, "large") ?? noImage}
             ></Image>
@@ -67,7 +67,7 @@ export default function ProductImages(props: any) {
                     <Image
                       width={image.attributes.width}
                       height={image.attributes.height}
-                      alt={image.attributes.alternativeText}
+                      alt={image.attributes.alternativeText ?? ""}
                       onClick={() => setSelectedImage(image)}
                       className={clsx(
                         "rounded-xl bg-imageBackground",
@@ -90,7 +90,7 @@ export default function ProductImages(props: any) {
                   <Image
                     width={image.attributes.width}
                     height={image.attributes.height}
-                    alt={image.attributes.alternativeText}
+                    alt={image.attributes.alternativeText ?? ""}
                     className="max-w-40 rounded-xl bg-imageBackground"
                     src={getImageURLBySize(image!, "small") ?? noImage}
                   ></Image>

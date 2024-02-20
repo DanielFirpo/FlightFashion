@@ -7,17 +7,13 @@ import { ReactNode, Suspense, useEffect, useState } from "react";
 import { Category } from "@apiTypes/category/content-types/category/category";
 import Marquee from "react-fast-marquee";
 import { Product as ProductResponse } from "@apiTypes/product/content-types/product/product";
-import {
-  parseAsArrayOf,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from "nuqs";
+import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import useSWR from "swr";
 import { buildStrapiRequest, fetchAPIClient } from "@/src/app/_utils/strapiApi";
 import Product from "./ProductListItem";
 import ProductPaginationControl from "./PaginationControl";
 import FilterList from "./FilterList";
+import Link from "next/link";
 
 export default function ProductList(props: {
   category: Category;
@@ -25,32 +21,18 @@ export default function ProductList(props: {
   children: ReactNode[];
   pageData: ProductsPage;
 }) {
-  const bannerTextColored = props.category.attributes.bannerText
-    .split(" ")
-    .map((word, index) => (
-      <span
-        key={word + index}
-        className={`${index % 2 ? "text-highlightYellow" : "text-white"}`}
-      >
-        {word}&nbsp;
-      </span>
-    ));
+  const bannerTextColored = props.category.attributes.bannerText.split(" ").map((word, index) => (
+    <span key={word + index} className={`${index % 2 ? "text-highlightYellow" : "text-white"}`}>
+      {word}&nbsp;
+    </span>
+  ));
 
   const [products, setProducts] = useState<ProductResponse[]>();
-  const [searchTerm, setSearchTerm] = useQueryState<string>(
-    "search",
-    parseAsString.withDefault(""),
-  );
+  const [searchTerm, setSearchTerm] = useQueryState<string>("search", parseAsString.withDefault(""));
   const [searchInput, setSearchInput] = useState<string>("");
-  const [selectedTags, setSelectedTags] = useQueryState<string[]>(
-    "tags",
-    parseAsArrayOf(parseAsString),
-  );
+  const [selectedTags, setSelectedTags] = useQueryState<string[]>("tags", parseAsArrayOf(parseAsString));
 
-  const [page, setPage] = useQueryState<number>(
-    "page",
-    parseAsInteger.withDefault(1),
-  );
+  const [page, setPage] = useQueryState<number>("page", parseAsInteger.withDefault(1));
 
   const [totalPages, setTotalPages] = useState<number>(1);
 
@@ -59,7 +41,6 @@ export default function ProductList(props: {
     setTotalPages(1);
   }
 
-  //TODO: implement fuzzy search in strapi
   let options = {
     filters: {
       ...(props.category.attributes.slug != "all"
@@ -120,10 +101,7 @@ export default function ProductList(props: {
     };
   };
 
-  const { requestUrl, mergedOptions } = buildStrapiRequest(
-    "/products",
-    options,
-  );
+  const { requestUrl, mergedOptions } = buildStrapiRequest("/products", options);
 
   const { data, error, isLoading } = useSWR<{
     data: ProductResponse[];
@@ -136,9 +114,7 @@ export default function ProductList(props: {
   useSWR<{
     data: ProductResponse[];
     meta: MetaData;
-  }>(nextPage.requestUrl, (url: any) =>
-    fetchAPIClient(url, nextPage.mergedOptions),
-  );
+  }>(nextPage.requestUrl, (url: any) => fetchAPIClient(url, nextPage.mergedOptions));
 
   useEffect(() => {
     setProducts(data?.data);
@@ -162,6 +138,9 @@ export default function ProductList(props: {
     return (
       <div className="flex w-full items-center justify-center text-4xl font-bold">
         An Error Occurred
+        <Link href="/">
+          <Button>Go Home</Button>
+        </Link>
       </div>
     );
 
@@ -175,7 +154,7 @@ export default function ProductList(props: {
       ></FilterList>
 
       <div className="flex flex-col">
-        <div className="md:ml-auto flex h-56 md:w-[calc(100%-18rem)] flex-col items-end md:pl-5 pt-7 md:pt-0">
+        <div className="flex h-56 flex-col items-end pt-7 md:ml-auto md:w-[calc(100%-18rem)] md:pl-5 md:pt-0">
           {/* Search Bar */}
           <div className="flex w-full">
             <div className="mr-4 flex w-full items-center justify-center rounded-full border-1.5 border-black">
@@ -220,10 +199,7 @@ export default function ProductList(props: {
           {/* Category Banner */}
           <div className="mb-5 mt-5 flex h-56 w-full items-center rounded-3xl bg-black pb-4 pt-4 text-white">
             <Suspense fallback={bannerTextColored}>
-              <Marquee
-                autoFill={true}
-                className="overflow-y-clip align-middle font-alumniSans text-5xl font-gigabold"
-              >
+              <Marquee autoFill={true} className="overflow-y-clip align-middle font-alumniSans text-5xl font-gigabold">
                 <span>
                   {bannerTextColored}
                   <span className="px-5 text-highlightYellow">✦&nbsp;</span>
@@ -235,26 +211,19 @@ export default function ProductList(props: {
 
         {/* Product List */}
         {products?.length || isLoading ? (
-          <div className="flex flex-wrap justify-center gap-5 mt-10 md:mt-0">
-            <div className="invisible h-[32rem] w-64 hidden md:inline-block"></div>
+          <div className="mt-10 flex flex-wrap justify-center gap-5 md:mt-0">
+            <div className="invisible hidden h-[32rem] w-64 md:inline-block"></div>
             {products
               ? products.map((product) => {
-                  return (
-                    <Product
-                      key={product.attributes.slug}
-                      product={product}
-                    ></Product>
-                  );
+                  return <Product key={product.attributes.slug} product={product}></Product>;
                 })
               : props.children.slice(1, props.children.length)}
           </div>
         ) : (
-          <div className="md:ml-64 flex h-[28rem] items-center justify-center text-center">
+          <div className="flex h-[28rem] items-center justify-center text-center md:ml-64">
             <div className="flex w-fit flex-col gap-6">
               <div className="text-2xl font-bold">Oh No!</div>
-              <div className="text-large">
-                No products match your search criteria...
-              </div>
+              <div className="text-large">No products match your search criteria...</div>
               <Button
                 onClick={() => {
                   setSearchTerm(null);
@@ -268,11 +237,7 @@ export default function ProductList(props: {
           </div>
         )}
       </div>
-      <ProductPaginationControl
-        page={page}
-        totalPages={totalPages}
-        setPage={setPage}
-      ></ProductPaginationControl>
+      <ProductPaginationControl page={page} totalPages={totalPages} setPage={setPage}></ProductPaginationControl>
     </div>
   );
 }

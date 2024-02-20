@@ -1,5 +1,3 @@
-"use server";
-
 import { Button } from "@/src/app/_components/shadcn/button";
 import {
   Carousel,
