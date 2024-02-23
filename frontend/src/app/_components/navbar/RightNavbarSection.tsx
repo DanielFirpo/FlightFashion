@@ -2,11 +2,24 @@
 
 import { Tooltip } from "@nextui-org/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StoredCartItem } from "../../cart/page";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/src/app/_components/shadcn/navigation-menu";
+import { Separator } from "@/src/app/_components/shadcn/separator";
+import { AuthContext, AuthScreen } from "../../_providers/AuthProvider";
 
 export default function RightNavbarSection() {
   const [cartItems, setCartItems] = useState<StoredCartItem[]>([]);
+
+  const { setAuthScreen } = useContext(AuthContext);
 
   function loadItems() {
     const storedItems: StoredCartItem[] = JSON.parse(localStorage.getItem("cartItems") || `[]`);
@@ -15,9 +28,8 @@ export default function RightNavbarSection() {
 
   useEffect(() => {
     loadItems();
-    window.addEventListener("storage", () => {
-      loadItems();
-    });
+    window.addEventListener("storage", loadItems);
+    return () => window.removeEventListener("storage", loadItems);
   }, []);
 
   let cartItemCount = 0;
@@ -27,6 +39,8 @@ export default function RightNavbarSection() {
       cartItemCount += varient.quantity;
     });
   });
+
+  const username = "Guest User";
 
   return (
     <div className="hidden items-center md:flex">
@@ -42,22 +56,79 @@ export default function RightNavbarSection() {
           </div>
         </Tooltip>
       </Link>
-      <Tooltip closeDelay={0} color="default" showArrow={true} content="My Profile">
-        <div
-          className="flex h-10 w-32 cursor-pointer items-center justify-center rounded-full bg-white
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger className="w-36 rounded-full bg-white px-3 text-black">
+              <div
+                className="flex h-10 w-32 cursor-pointer items-center
                 text-black"
-        >
-          <div>
-            <span className="icon-[iconoir--profile-circle] size-6 align-middle"></span>
-          </div>
-          <div className="px-2 font-dmSans text-xs font-normal">
-            {"longassusername".length > 7 ? "longassusername".substring(0, 7) + "..." : "longassusername"}
-          </div>
-          <div>
-            <span className="icon-[teenyicons--down-outline] size-3 align-middle"></span>
-          </div>
-        </div>
-      </Tooltip>
+              >
+                <div>
+                  <span className="icon-[iconoir--profile-circle] size-6 align-middle"></span>
+                </div>
+                <div className="mx-auto font-dmSans text-xs font-normal">
+                  {username.length > 10 ? username.substring(0, 10) + "..." : username}
+                </div>
+                {/* <div>
+                  <span className="icon-[teenyicons--down-outline] mr-2 size-3 align-middle"></span>
+                </div> */}
+              </div>
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="flex w-[300px] flex-col gap-3 p-4 lg:w-[400px]">
+                {false ? (
+                  // logged in view
+                  <>
+                    <div className="flex justify-center">
+                      <div>
+                        <span className="icon-[iconoir--profile-circle] mr-2 size-6 align-middle"></span>
+                      </div>
+                      <div className="text-center font-bold">{username}</div>
+                    </div>
+                    <Separator></Separator>
+                    <NavigationMenuLink asChild>
+                      <div className="block w-full cursor-pointer select-none space-y-1 rounded-md border-1.5 border-imageBackground p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">My Orders</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">View and edit your orders.</p>
+                      </div>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
+                      <div className="block w-full cursor-pointer select-none space-y-1 rounded-md border-1.5 border-imageBackground p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">Log Out</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Log out of your account.</p>
+                      </div>
+                    </NavigationMenuLink>
+                  </>
+                ) : (
+                  // logged out view
+                  <>
+                    <div className="flex justify-center">
+                      <div>
+                        <span className="icon-[iconoir--profile-circle] mr-2 size-6 align-middle"></span>
+                      </div>
+                      <div className="text-center font-bold">{username}</div>
+                    </div>
+                    <Separator></Separator>
+                    <NavigationMenuLink asChild onClick={() => setAuthScreen(AuthScreen.LOGIN)}>
+                      <div className="block w-full cursor-pointer select-none space-y-1 rounded-md border-1.5 border-imageBackground p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">Log In</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Log in to your account.</p>
+                      </div>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild onClick={() => setAuthScreen(AuthScreen.SIGNUP)}>
+                      <div className="block w-full cursor-pointer select-none space-y-1 rounded-md border-1.5 border-imageBackground p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">Sign Up</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Create a new account.</p>
+                      </div>
+                    </NavigationMenuLink>
+                  </>
+                )}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
     </div>
   );
 }

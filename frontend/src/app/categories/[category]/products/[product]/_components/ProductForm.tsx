@@ -6,12 +6,10 @@ import { ProductSize } from "@apiTypes/product-size/content-types/product-size/p
 import { ProductColor } from "@apiTypes/product-color/content-types/product-color/product-color";
 import { useToast } from "@/src/app/_components/shadcn/use-toast";
 import { ToastAction } from "@/src/app/_components/shadcn/toast";
-import { Toaster } from "@/src/app/_components/shadcn/toaster";
 import { cn } from "@/src/app/_utils/shadUtils";
 import clsx from "clsx";
 import PriceDisplay from "../../_components/PriceDisplay";
 import { StoredCartItem, ItemVariant } from "@/src/app/cart/page";
-import { useLocalStorage } from "usehooks-ts";
 
 export default function ProductForm(props: { productData: Product }) {
   const { toast } = useToast();
@@ -129,7 +127,6 @@ export default function ProductForm(props: { productData: Product }) {
         </div>
       </div>
 
-      <Toaster />
       {/* Add to Cart */}
       <div className="mt-7 flex">
         <button
@@ -188,10 +185,9 @@ export default function ProductForm(props: { productData: Product }) {
 
     console.log(storedItems);
 
-    const existingItem = storedItems.find((item) => (productData.id === item.id));
+    const existingItem = storedItems.find((item) => productData.id === item.id);
 
     if (!existingItem) {
-      //add the variant since it doesn't exist
       storedItems.push({
         id: productData.id,
         variantQuantities: [
@@ -206,7 +202,6 @@ export default function ProductForm(props: { productData: Product }) {
       const existingVariant = existingItem.variantQuantities.find(
         (variant) => variant.colorId === colorSelection?.id && variant.sizeId === sizeSelection?.id,
       );
-      //update the variant since it exists already
       if (!existingVariant) {
         existingItem.variantQuantities.push({
           colorId: colorSelection?.id,
@@ -214,7 +209,6 @@ export default function ProductForm(props: { productData: Product }) {
           quantity: quantityAdjustment,
         });
       } else {
-        //update the item since it exists already
         existingVariant.quantity += quantityAdjustment;
       }
     }
