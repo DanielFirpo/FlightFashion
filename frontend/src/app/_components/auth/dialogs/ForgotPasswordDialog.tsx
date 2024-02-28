@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form } from "../../../_components/shadcn/form";
 import { AuthContext, AuthScreen } from "@/src/app/_providers/AuthProvider";
+import axios from "axios";
+import { buildStrapiRequest } from "@/src/app/_utils/strapiApi";
 
 export default function ForgotPasswordDialog() {
   const [isEmailSent, setIsEmailSent] = useState(false);
@@ -29,9 +31,18 @@ export default function ForgotPasswordDialog() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsEmailSent(true);
-    setCanResendEmail(false);
-    setTimeout(() => setCanResendEmail(true), 10 * 1000);
+    axios
+      .post(buildStrapiRequest("/auth/forgot-password").requestUrl, {
+        email: values.email,
+      })
+      .then(() => {
+        setIsEmailSent(true);
+        setCanResendEmail(false);
+        setTimeout(() => setCanResendEmail(true), 10 * 1000);
+      })
+      .catch((error) => {
+        console.log("An error occurred:", error.response);
+      });
   }
 
   return (

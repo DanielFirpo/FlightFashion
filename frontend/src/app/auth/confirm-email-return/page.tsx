@@ -4,11 +4,14 @@ import { useSearchParams } from "next/navigation";
 import { redirect } from "next/navigation";
 
 import { useToast } from "@/src/app/_components/shadcn/use-toast";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { AuthContext, AuthScreen } from "../../_providers/AuthProvider";
 
 export default function ConfirmEmailReturn() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
+
+  const { setAuthScreen } = useContext(AuthContext);
 
   const code = searchParams.get("code");
 
@@ -24,6 +27,7 @@ export default function ConfirmEmailReturn() {
       title: "Your email has been confirmed!",
       variant: "green",
     });
+    setAuthScreen(AuthScreen.LOGIN);
     redirect(returnTo);
-  }, [returnTo, toast]);
+  }, [returnTo, setAuthScreen, toast]);
 }

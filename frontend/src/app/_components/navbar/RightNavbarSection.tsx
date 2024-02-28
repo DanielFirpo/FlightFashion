@@ -19,7 +19,7 @@ import { AuthContext, AuthScreen } from "../../_providers/AuthProvider";
 export default function RightNavbarSection() {
   const [cartItems, setCartItems] = useState<StoredCartItem[]>([]);
 
-  const { setAuthScreen } = useContext(AuthContext);
+  const { setAuthScreen, authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
 
   function loadItems() {
     const storedItems: StoredCartItem[] = JSON.parse(localStorage.getItem("cartItems") || `[]`);
@@ -40,7 +40,7 @@ export default function RightNavbarSection() {
     });
   });
 
-  const username = "Guest User";
+  const username = authenticatedUser?.userInfo.username ? authenticatedUser?.userInfo.username.split("@")[0] : "Guest User";
 
   return (
     <div className="hidden items-center md:flex">
@@ -77,7 +77,7 @@ export default function RightNavbarSection() {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="flex w-[300px] flex-col gap-3 p-4 lg:w-[400px]">
-                {false ? (
+                {authenticatedUser?.userToken ? (
                   // logged in view
                   <>
                     <div className="flex justify-center">
@@ -87,13 +87,25 @@ export default function RightNavbarSection() {
                       <div className="text-center font-bold">{username}</div>
                     </div>
                     <Separator></Separator>
-                    <NavigationMenuLink asChild>
-                      <div className="block w-full cursor-pointer select-none space-y-1 rounded-md border-1.5 border-imageBackground p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">My Orders</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">View and edit your orders.</p>
-                      </div>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
+                    <Link href="/cart">
+                      <NavigationMenuLink asChild>
+                        <div className="block w-full cursor-pointer select-none space-y-1 rounded-md border-1.5 border-imageBackground p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="text-sm font-medium leading-none">My Cart</div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            View and edit items in your cart.
+                          </p>
+                        </div>
+                      </NavigationMenuLink>
+                    </Link>
+                    <Link href="/orders">
+                      <NavigationMenuLink asChild>
+                        <div className="block w-full cursor-pointer select-none space-y-1 rounded-md border-1.5 border-imageBackground p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="text-sm font-medium leading-none">My Orders</div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">View and edit your orders.</p>
+                        </div>
+                      </NavigationMenuLink>
+                    </Link>
+                    <NavigationMenuLink asChild onClick={() => setAuthenticatedUser(undefined)}>
                       <div className="block w-full cursor-pointer select-none space-y-1 rounded-md border-1.5 border-imageBackground p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                         <div className="text-sm font-medium leading-none">Log Out</div>
                         <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Log out of your account.</p>

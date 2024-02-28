@@ -9,11 +9,15 @@ import { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form } from "../../../_components/shadcn/form";
 import { useToast } from "../../shadcn/use-toast";
 import { AuthContext, AuthScreen } from "@/src/app/_providers/AuthProvider";
+import { buildStrapiRequest } from "@/src/app/_utils/strapiApi";
+import axios from "axios";
 
 export default function LoginDialog() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { setAuthScreen } = useContext(AuthContext);
+  const [loginError, setLoginError] = useState<string | undefined>(undefined);
+
+  const { setAuthScreen, setAuthenticatedUser } = useContext(AuthContext);
 
   const { toast } = useToast();
 
@@ -35,13 +39,27 @@ export default function LoginDialog() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    toast({
-      duration: 4000,
-      className: "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
-      title: "You have logged in successfully.",
-      variant: "green",
-    });
-    setAuthScreen(AuthScreen.CLOSED);
+    axios
+      .post(buildStrapiRequest("/auth/local").requestUrl, {
+        identifier: values.email,
+        password: values.password,
+      })
+      .then((response) => {
+        console.log("User profile", response.data.user);
+        console.log("User token", response.data.jwt);
+        setAuthenticatedUser({ userInfo: response.data.user, userToken: response.data.jwt });
+        setAuthScreen(AuthScreen.CLOSED);
+        toast({
+          duration: 4000,
+          className: "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
+          title: "You have logged in successfully.",
+          variant: "green",
+        });
+      })
+      .catch((error) => {
+        console.log("An error occurred:", error.response);
+        setLoginError(error.response.data.error.message);
+      });
   }
 
   return (
@@ -85,6 +103,7 @@ export default function LoginDialog() {
               )}
             />
           </div>
+          {loginError && <div className="w-full text-center text-red-600">Error: {loginError}</div>}
           <DialogFooter>
             <div className="flex w-full flex-col items-center">
               <Button type="submit" size="sm" variant="hightlighted" className="w-full">

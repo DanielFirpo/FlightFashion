@@ -6,12 +6,14 @@ import ConfirmEmailDialog from "./dialogs/ConfirmEmailDialog";
 import ForgotPasswordDialog from "./dialogs/ForgotPasswordDialog";
 import { AuthContext, AuthScreen } from "../../_providers/AuthProvider";
 import { useContext } from "react";
+import ResetPasswordDialog from "./dialogs/ResetPasswordDialog";
 
 const dialogs: Map<AuthScreen, React.FC> = new Map([
   [AuthScreen.LOGIN, LoginDialog],
   [AuthScreen.SIGNUP, SignupDialog],
   [AuthScreen.CONFIRMEMAIL, ConfirmEmailDialog],
   [AuthScreen.FORGOTPASSWORD, ForgotPasswordDialog],
+  [AuthScreen.RESETPASSWORD, ResetPasswordDialog],
 ]);
 
 //this component renders a different dialog depending on which step of the auth process we are in.

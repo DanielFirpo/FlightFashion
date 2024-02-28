@@ -1,23 +1,29 @@
 import { DialogFooter } from "../../shadcn/dialog";
 import { Button } from "../../shadcn/button";
 import { Input } from "../../shadcn/input";
-import { Label } from "../../shadcn/label";
 import DialogFrame from "./DialogFrame";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form } from "../../../_components/shadcn/form";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useToast } from "../../shadcn/use-toast";
 import { AuthContext, AuthScreen } from "@/src/app/_providers/AuthProvider";
+import axios from "axios";
+import { buildStrapiRequest } from "@/src/app/_utils/strapiApi";
 
 export default function SignupDialog() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [signupError, setSignupError] = useState<string | undefined>(undefined);
 
-  const { setAuthScreen } = useContext(AuthContext);
+  const { setAuthScreen, setAuthenticatedUser, authenticatedUser } = useContext(AuthContext);
 
-  const { toast } = useToast();
+  useEffect(() => {
+    if (authenticatedUser && !authenticatedUser.userInfo.confirmed) {
+      setAuthScreen(AuthScreen.CONFIRMEMAIL);
+    }
+  }, [authenticatedUser, setAuthScreen]);
 
   const formSchema = z
     .object({
@@ -51,13 +57,20 @@ export default function SignupDialog() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    toast({
-      duration: 4000,
-      className: "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
-      title: "Your account has been created successfully.",
-      variant: "green",
-    });
-    setAuthScreen(AuthScreen.CONFIRMEMAIL);
+    axios
+      .post(buildStrapiRequest("/auth/local/register").requestUrl, {
+        username: values.email,
+        email: values.email,
+        password: values.password,
+      })
+      .then((response) => {
+        setAuthenticatedUser({ userInfo: response.data.user, userToken: undefined });
+        setAuthScreen(AuthScreen.CONFIRMEMAIL);
+      })
+      .catch((error) => {
+        console.log("An error occurred:", error.response);
+        setSignupError(error.response.data.error.message);
+      });
   }
 
   return (
@@ -123,6 +136,7 @@ export default function SignupDialog() {
               )}
             />
           </div>
+          {signupError && <div className="w-full text-center text-red-600">Error: {signupError}</div>}
           <DialogFooter>
             <div className="flex w-full flex-col items-center">
               <Button type="submit" size="sm" variant="hightlighted" className="w-full">
