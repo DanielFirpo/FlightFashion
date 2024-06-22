@@ -5,10 +5,13 @@ import { Category } from '../../../category/content-types/category/category';
 import { ProductTag } from '../../../product-tag/content-types/product-tag/product-tag';
 import { ProductSize } from '../../../product-size/content-types/product-size/product-size';
 import { ProductColor } from '../../../product-color/content-types/product-color/product-color';
+import { Inventory } from '../../../../components/product/interfaces/Inventory';
 import { Category_Plain } from '../../../category/content-types/category/category';
 import { ProductTag_Plain } from '../../../product-tag/content-types/product-tag/product-tag';
 import { ProductSize_Plain } from '../../../product-size/content-types/product-size/product-size';
 import { ProductColor_Plain } from '../../../product-color/content-types/product-color/product-color';
+import { Inventory_Plain } from '../../../../components/product/interfaces/Inventory';
+import { Inventory_NoRelations } from '../../../../components/product/interfaces/Inventory';
 import { AdminPanelRelationPropertyModification } from '../../../../common/schemas-to-ts/AdminPanelRelationPropertyModification';
 
 export interface Product {
@@ -25,6 +28,7 @@ export interface Product {
     product_tags?: { data: ProductTag[] };
     product_sizes?: { data: ProductSize[] };
     product_colors?: { data: ProductColor[] };
+    variantInventory: Inventory[];
   };
 }
 export interface Product_Plain {
@@ -40,6 +44,7 @@ export interface Product_Plain {
   product_tags?: ProductTag_Plain[];
   product_sizes?: ProductSize_Plain[];
   product_colors?: ProductColor_Plain[];
+  variantInventory: Inventory_Plain[];
 }
 
 export interface Product_NoRelations {
@@ -55,6 +60,7 @@ export interface Product_NoRelations {
   product_tags?: number[];
   product_sizes?: number[];
   product_colors?: number[];
+  variantInventory: Inventory_NoRelations[];
 }
 
 export interface Product_AdminPanelLifeCycle {
@@ -70,4 +76,5 @@ export interface Product_AdminPanelLifeCycle {
   product_tags?: AdminPanelRelationPropertyModification<ProductTag_Plain>;
   product_sizes?: AdminPanelRelationPropertyModification<ProductSize_Plain>;
   product_colors?: AdminPanelRelationPropertyModification<ProductColor_Plain>;
+  variantInventory: Inventory_Plain[];
 }

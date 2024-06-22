@@ -5,11 +5,9 @@ export default ({ env }) => {
     },
     email: {
       config: {
-        provider: "amazon-ses",
+        provider: "strapi-provider-email-resend",
         providerOptions: {
-          key: env("AWS_SES_KEY"),
-          secret: env("AWS_SES_SECRET"),
-          amazon: "https://email.us-east-1.amazonaws.com",
+          apiKey: env("RESEND_API_KEY"), // Required
         },
         settings: {
           defaultFrom: "danielfirpodev@gmail.com",

@@ -21,6 +21,7 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
     "strapi-plugin-schemas-to-ts": "^1.1.21",
+    "strapi-provider-email-resend": "^1.0.4",
     "styled-components": "5.3.3"
   },
   "author": {
@@ -33,5 +34,8 @@
     "node": ">=18.0.0 <=20.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  }
 }

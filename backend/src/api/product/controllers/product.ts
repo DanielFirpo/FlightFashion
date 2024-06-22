@@ -1,7 +1,12 @@
 /**
  * product controller
  */
+const collectionType = "product";
 
-import { factories } from '@strapi/strapi'
+const schema = require(`../content-types/${collectionType}/schema.json`);
+const createPopulatedProductController = require("../../../helpers/populate");
 
-export default factories.createCoreController('api::product.product');
+module.exports = createPopulatedProductController(
+  `api::${collectionType}.${collectionType}`,
+  schema,
+);

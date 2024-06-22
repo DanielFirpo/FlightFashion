@@ -1170,6 +1170,8 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'manyToMany',
       'api::product-color.product-color'
     >;
+    variantInventory: Attribute.Component<'product.inventory', true> &
+      Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

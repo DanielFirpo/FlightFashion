@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_product_inventories",
+  "info": {
+    "displayName": "Inventory",
+    "icon": "briefcase",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "product_color": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-color.product-color"
+    },
+    "product_size": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-size.product-size"
+    },
+    "quantity": {
+      "type": "integer",
+      "required": true,
+      "default": 0
+    }
+  }
+}

@@ -20,7 +20,7 @@
     "paths": {
       "@/*": ["./*"],
       "@apiTypes/*": ["../backend/src/api/*"],
-      "@strapiTypes/*": ["../backend/src/common/*"]
+      "@strapiTypes/*": ["../backend/src/common/*"] 
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

@@ -28,6 +28,8 @@ export default function ProductForm(props: { productData: Product }) {
 
   const inputTitleClasses = "font-dmSans font-semibold text-medium mt-6";
 
+  console.log("variant inventory", productData.attributes.variantInventory);
+
   useEffect(() => {
     setStoredItems(JSON.parse(localStorage.getItem("cartItems") || `[]`));
   }, []);
@@ -82,7 +84,7 @@ export default function ProductForm(props: { productData: Product }) {
       {/* Price Display */}
       <div className={inputTitleClasses}>Total Price</div>
       <div className="flex max-w-[30rem]">
-        <div className="my-3 flex w-full flex-wrap justify-between">
+        <div className="my-3 flex w-full flex-wrap justify-between gap-8">
           <PriceDisplay
             product={productData}
             fees={(sizeSelection?.attributes.fee ?? 0) + (colorSelection?.attributes.fee ?? 0)}
@@ -91,38 +93,55 @@ export default function ProductForm(props: { productData: Product }) {
           ></PriceDisplay>
 
           {/* Quantity Selector */}
-          <div className="flex justify-between">
-            <button
-              onClick={() => setQuantitySelection(quantitySelection - 1 < 1 ? 1 : quantitySelection - 1)}
-              className="h-7 w-7 rounded-lg bg-black text-center text-white"
-            >
-              <span className="icon-[ph--arrow-left-bold] mb-0.5 size-4 align-middle"></span>
-            </button>
-            <input
-              value={quantitySelection + ""}
-              type="number"
-              onChange={(e) => {
-                let parsedQuantity = parseInt(
-                  e.target.value.replace(/^0+/, "") === "" ? "0" : e.target.value.replace(/^0+/, ""),
-                  10,
-                );
-                parsedQuantity = parsedQuantity > 1000 ? 1000 : parsedQuantity;
-                parsedQuantity = parsedQuantity < 1 ? 1 : parsedQuantity;
+          <div className="flex flex-col items-center justify-center">
+            <div className="flex justify-between">
+              <button
+                disabled={getVariantInventoryQuantity(colorSelection, sizeSelection, productData) < 1}
+                onClick={() => setQuantitySelection(quantitySelection <= 1 ? 1 : quantitySelection - 1)}
+                className="h-7 w-7 rounded-lg bg-black text-center text-white disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <span className="icon-[ph--arrow-left-bold] mb-0.5 size-4 align-middle"></span>
+              </button>
+              <input
+                disabled={getVariantInventoryQuantity(colorSelection, sizeSelection, productData) < 1}
+                value={quantitySelection + ""}
+                type="number"
+                onChange={(e) => {
+                  let parsedQuantity = parseInt(
+                    e.target.value.replace(/^0+/, "") === "" ? "0" : e.target.value.replace(/^0+/, ""),
+                    10,
+                  );
+                  parsedQuantity =
+                    parsedQuantity > getVariantInventoryQuantity(colorSelection, sizeSelection, productData)
+                      ? getVariantInventoryQuantity(colorSelection, sizeSelection, productData)
+                      : parsedQuantity;
+                  parsedQuantity = parsedQuantity < 1 ? 1 : parsedQuantity;
 
-                setQuantitySelection(parsedQuantity);
-              }}
-              className="mx-1.5 flex h-7 min-w-7 items-center justify-center rounded-lg border-1.5 border-black
-                   bg-transparent px-0.5 text-center text-sm focus:outline-none"
-              style={{
-                width: 10 + quantitySelection.toString().length * 9 + "px",
-              }}
-            ></input>
-            <button
-              onClick={() => setQuantitySelection(quantitySelection + 1 > 1000 ? quantitySelection : quantitySelection + 1)}
-              className="h-7 w-7 rounded-lg bg-black text-center text-white"
-            >
-              <span className="icon-[ph--arrow-right-bold] mb-0.5 size-4 align-middle"></span>
-            </button>
+                  setQuantitySelection(parsedQuantity);
+                }}
+                className="mx-1.5 flex h-7 min-w-7 items-center justify-center rounded-lg border-1.5 border-black
+                     bg-transparent px-0.5 text-center text-sm focus:outline-none disabled:cursor-not-allowed disabled:opacity-70"
+                style={{
+                  width: 10 + quantitySelection.toString().length * 9 + "px",
+                }}
+              ></input>
+              <button
+                disabled={getVariantInventoryQuantity(colorSelection, sizeSelection, productData) < 1}
+                onClick={() =>
+                  setQuantitySelection(
+                    quantitySelection + 1 > getVariantInventoryQuantity(colorSelection, sizeSelection, productData)
+                      ? quantitySelection
+                      : quantitySelection + 1,
+                  )
+                }
+                className="h-7 w-7 rounded-lg bg-black text-center text-white disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <span className="icon-[ph--arrow-right-bold] mb-0.5 size-4 align-middle"></span>
+              </button>
+            </div>
+            {getVariantInventoryQuantity(colorSelection, sizeSelection, productData) < 1 && (
+              <div className="mt-7 font-bold">Out of Stock!</div>
+            )}
           </div>
         </div>
       </div>
@@ -130,7 +149,9 @@ export default function ProductForm(props: { productData: Product }) {
       {/* Add to Cart */}
       <div className="mt-7 flex">
         <button
+          disabled={getVariantInventoryQuantity(colorSelection, sizeSelection, productData) < 1}
           onClick={() => {
+            console.log("qty", getVariantInventoryQuantity(colorSelection, sizeSelection, productData));
             const undoFunction = updateStoredItem(quantitySelection, colorSelection, sizeSelection, productData, storedItems);
             toast({
               duration: 2500,
@@ -149,7 +170,7 @@ export default function ProductForm(props: { productData: Product }) {
               ),
             });
           }}
-          className="flex items-center justify-center rounded-xl bg-highlightYellow px-6 py-3 font-dmSans font-semibold"
+          className="flex items-center justify-center rounded-xl bg-highlightYellow px-6 py-3 font-dmSans font-semibold disabled:cursor-not-allowed disabled:opacity-70"
         >
           <span className="icon-[heroicons--shopping-bag] mr-2 size-5"></span>
           Add to Cart
@@ -172,6 +193,21 @@ export default function ProductForm(props: { productData: Product }) {
     </div>
   );
 
+  function getVariantInventoryQuantity(
+    colorSelection: ProductColor | undefined,
+    sizeSelection: ProductSize | undefined,
+    productData: Product,
+  ): number {
+    const selectedVariant = productData.attributes.variantInventory.find((variant) => {
+      console.log(variant);
+      if (variant.product_color?.data?.id === colorSelection?.id && variant.product_size?.data?.id === sizeSelection?.id) {
+        return true;
+      }
+    });
+    console.log("qty", selectedVariant?.quantity);
+    return selectedVariant?.quantity ?? 0;
+  }
+
   // TODO: there must be a way to make this func less convoluted, right?
   function updateStoredItem(
     quantityAdjustment: number,
@@ -183,10 +219,9 @@ export default function ProductForm(props: { productData: Product }) {
     //undo return will use this to revert the state back.
     const restorePoint = structuredClone(storedItems);
 
-    console.log(storedItems);
-
     const existingItem = storedItems.find((item) => productData.id === item.id);
 
+    //add a whole new cart item or update if already exists
     if (!existingItem) {
       storedItems.push({
         id: productData.id,

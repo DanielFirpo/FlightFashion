@@ -5,13 +5,10 @@ type ImageSize = "thumbnail" | "small" | "medium" | "large";
 /**
  * Get a specific image URL by size, will return the closest size if unavailable.
  * @param {Media} image - The image.
- * @param {"thumbnail" | "xsmall" | "small" | "medium" | "large" | "xlarge"} [size="medium"] - The size, default medium.
+ * @param {"thumbnail" | "small" | "medium" | "large"} [size="medium"] - The size, default medium.
  * @returns {string} The URL of the selected image.
  */
-export function getImageURLBySize(
-  image: Media,
-  size: ImageSize = "medium",
-): string | undefined {
+export function getImageURLBySize(image: Media, size: ImageSize = "medium"): string | undefined {
   const formats: ImageSize[] = ["thumbnail", "small", "medium", "large"];
 
   const requestedImage = image.attributes.formats[size]?.url;
@@ -25,15 +22,9 @@ export function getImageURLBySize(
     const largerFormat: ImageSize = formats[larger];
 
     if (image.attributes.formats[smallerFormat]) {
-      return (
-        process.env.NEXT_PUBLIC_API_URL +
-        image.attributes.formats[smallerFormat].url
-      );
+      return process.env.NEXT_PUBLIC_API_URL + image.attributes.formats[smallerFormat].url;
     } else if (image.attributes.formats[largerFormat]) {
-      return (
-        process.env.NEXT_PUBLIC_API_URL +
-        image.attributes.formats[largerFormat].url
-      );
+      return process.env.NEXT_PUBLIC_API_URL + image.attributes.formats[largerFormat].url;
     }
   }
 }
@@ -45,17 +36,9 @@ export function getStrapiURL(path = "") {
 /**
  * Server only.
  */
-export async function fetchAPI(
-  path: string,
-  urlParamsObject = {},
-  options = {},
-) {
+export async function fetchAPI(path: string, urlParamsObject = {}, options = {}) {
   try {
-    const { requestUrl, mergedOptions } = buildStrapiRequest(
-      path,
-      urlParamsObject,
-      options,
-    );
+    const { requestUrl, mergedOptions } = buildStrapiRequest(path, urlParamsObject, options);
 
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions);
@@ -63,9 +46,7 @@ export async function fetchAPI(
     return data;
   } catch (error) {
     console.error(error);
-    throw new Error(
-      `Please check if your server is running and you set all the required tokens.`,
-    );
+    throw new Error(`Please check if your server is running and you set all the required tokens.`);
   }
 }
 
@@ -77,23 +58,17 @@ export async function fetchAPIClient(requestUrl: string, mergedOptions = {}) {
     return data;
   } catch (error) {
     console.error(error);
-    throw new Error(
-      `Please check if your server is running and you set all the required tokens.`,
-    );
+    throw new Error(`Please check if your server is running and you set all the required tokens.`);
   }
 }
 
 /**
  * Client only.
  */
-export function buildStrapiRequest(
-  path: string,
-  urlParamsObject = {},
-  options = {},
-) {
+export function buildStrapiRequest(path: string, urlParamsObject = {}, options = {}) {
   // Merge default and user options
   const mergedOptions = {
-    next: { revalidate: 10 },
+    next: { revalidate: 1 },
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${process.env.API_TOKEN ? process.env.API_TOKEN : process.env.NEXT_PUBLIC_API_TOKEN}`,
@@ -103,9 +78,7 @@ export function buildStrapiRequest(
 
   // Build request URL
   const queryString = qs.stringify(urlParamsObject);
-  const requestUrl = `${getStrapiURL(
-    `/api${path}${queryString ? `?${queryString}` : ""}`,
-  )}`;
+  const requestUrl = `${getStrapiURL(`/api${path}${queryString ? `?${queryString}` : ""}`)}`;
 
   return { requestUrl, mergedOptions };
 }
