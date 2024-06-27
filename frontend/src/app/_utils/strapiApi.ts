@@ -65,13 +65,19 @@ export async function fetchAPIClient(requestUrl: string, mergedOptions = {}) {
 /**
  * Client only.
  */
-export function buildStrapiRequest(path: string, urlParamsObject = {}, options = {}) {
+export function buildStrapiRequest(path: string, urlParamsObject = {}, options = {}, userToken?: string) {
+  console.log(
+    "userToken",
+    userToken,
+    `Bearer ${userToken ? userToken : process.env.NEXT_PUBLIC_API_TOKEN}`,
+    userToken === process.env.NEXT_PUBLIC_API_TOKEN,
+  );
   // Merge default and user options
   const mergedOptions = {
     next: { revalidate: 1 },
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.API_TOKEN ? process.env.API_TOKEN : process.env.NEXT_PUBLIC_API_TOKEN}`,
+      Authorization: `Bearer ${userToken ? userToken : process.env.NEXT_PUBLIC_API_TOKEN}`,
     },
     ...options,
   };

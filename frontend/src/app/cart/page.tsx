@@ -1,7 +1,7 @@
 "use client";
 
 import { buildStrapiRequest, fetchAPIClient, getImageURLBySize } from "@/src/app/_utils/strapiApi";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Product } from "@apiTypes/product/content-types/product/product";
 import useSWR from "swr";
 import Image from "next/image";
@@ -12,6 +12,7 @@ export type ItemVariant = {
   colorId: number | undefined;
   sizeId: number | undefined;
   quantity: number;
+  variantId: string;
 };
 
 export type StoredCartItem = {
@@ -184,9 +185,11 @@ export default function Page() {
             <span className="icon-[ph--arrow-left-bold] mb-0.5 mr-2 mt-0.5 size-4 align-middle"></span>Continue Shopping
           </Button>
         </Link>
-        <Button variant="hightlighted" disabled={cartItemCount < 1}>
-          Proceed to Checkout<span className="icon-[ph--arrow-right-bold] mb-0.5 ml-2 mt-0.5 size-4 align-middle"></span>
-        </Button>
+        <Link href="/checkout">
+          <Button variant="hightlighted" disabled={cartItemCount < 1}>
+            Proceed to Checkout<span className="icon-[ph--arrow-right-bold] mb-0.5 ml-2 mt-0.5 size-4 align-middle"></span>
+          </Button>
+        </Link>
       </div>
     </>
   );

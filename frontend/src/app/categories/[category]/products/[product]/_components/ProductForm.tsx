@@ -10,6 +10,7 @@ import { cn } from "@/src/app/_utils/shadUtils";
 import clsx from "clsx";
 import PriceDisplay from "../../_components/PriceDisplay";
 import { StoredCartItem, ItemVariant } from "@/src/app/cart/page";
+import { Inventory, Inventory_Plain } from "../../../../../../../../backend/src/components/product/interfaces/Inventory";
 
 export default function ProductForm(props: { productData: Product }) {
   const { toast } = useToast();
@@ -204,8 +205,24 @@ export default function ProductForm(props: { productData: Product }) {
         return true;
       }
     });
-    console.log("qty", selectedVariant?.quantity);
     return selectedVariant?.quantity ?? 0;
+  }
+
+  function getVariantInventoryId(
+    colorSelection: ProductColor | undefined,
+    sizeSelection: ProductSize | undefined,
+    productData: Product,
+  ): string {
+    const selectedVariant = productData.attributes.variantInventory.find((variant) => {
+      console.log(variant);
+      if (variant.product_color?.data?.id === colorSelection?.id && variant.product_size?.data?.id === sizeSelection?.id) {
+        return true;
+      }
+    }) as (Inventory & { id: string }) | undefined;
+
+    console.log("rly no variant id?", selectedVariant);
+
+    return selectedVariant?.id ?? "";
   }
 
   // TODO: there must be a way to make this func less convoluted, right?
@@ -227,6 +244,7 @@ export default function ProductForm(props: { productData: Product }) {
         id: productData.id,
         variantQuantities: [
           {
+            variantId: getVariantInventoryId(colorSelection, sizeSelection, productData),
             colorId: colorSelection?.id,
             sizeId: sizeSelection?.id,
             quantity: quantityAdjustment,
@@ -239,6 +257,7 @@ export default function ProductForm(props: { productData: Product }) {
       );
       if (!existingVariant) {
         existingItem.variantQuantities.push({
+          variantId: getVariantInventoryId(colorSelection, sizeSelection, productData),
           colorId: colorSelection?.id,
           sizeId: sizeSelection?.id,
           quantity: quantityAdjustment,

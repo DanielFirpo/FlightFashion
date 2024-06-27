@@ -53,7 +53,7 @@ function createPopulatedController(uid, schema) {
     return {
       async find(ctx) {
         // deeply populate all attributes with ?populate=*, else retain vanilla functionality
-        if (ctx.query.populate.includes("*")) {
+        if (ctx.query.populate?.includes("*")) {
           ctx.query = {
             ...ctx.query,
             populate: {

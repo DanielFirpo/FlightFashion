@@ -764,6 +764,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    orders: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::order.order'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1123,6 +1128,50 @@ export interface ApiNavbarNavbar extends Schema.SingleType {
   };
 }
 
+export interface ApiOrderOrder extends Schema.CollectionType {
+  collectionName: 'orders';
+  info: {
+    singularName: 'order';
+    pluralName: 'orders';
+    displayName: 'Order';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    total: Attribute.Decimal;
+    products: Attribute.Relation<
+      'api::order.order',
+      'oneToMany',
+      'api::product.product'
+    >;
+    status: Attribute.Enumeration<
+      ['Completed', 'Shipped', 'Delivered', 'Refunded']
+    >;
+    user: Attribute.Relation<
+      'api::order.order',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiProductProduct extends Schema.CollectionType {
   collectionName: 'products';
   info: {
@@ -1385,6 +1434,7 @@ declare module '@strapi/types' {
       'api::information-page.information-page': ApiInformationPageInformationPage;
       'api::link.link': ApiLinkLink;
       'api::navbar.navbar': ApiNavbarNavbar;
+      'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
       'api::product-color.product-color': ApiProductColorProductColor;
       'api::product-size.product-size': ApiProductSizeProductSize;
