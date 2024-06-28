@@ -1,5 +1,8 @@
 import { Product_Plain } from "../../product/content-types/product/product";
-import { Inventory } from "../../../components/product/interfaces/Inventory";
+import {
+  Inventory,
+  Inventory_Plain,
+} from "../../../components/product/interfaces/Inventory";
 import { MediaFormat } from "../../../common/schemas-to-ts/MediaFormat";
 import { Order_Plain } from "../../order/content-types/order/order";
 import { ID } from "@strapi/types/dist/types/core/entity";
@@ -43,6 +46,19 @@ module.exports = {
         line_items: cartItems.flatMap((cartItem) => {
           return cartItem.variantQuantities.map((variant) => {
             const product = entries.find((entry) => entry.id === cartItem.id);
+
+            const productVariant = product.variantInventory.find(
+              (inventory: Inventory_Plain & { id: string }) => {
+                if (inventory.id == variant.variantId) {
+                  return true;
+                }
+              },
+            );
+
+            if (productVariant.quantity < variant.quantity) {
+              throw new Error("Trying to buy more than is in stock.");
+            }
+
             const color = getColorById(product, variant.colorId);
             const size = getSizeById(product, variant.sizeId);
 
@@ -74,6 +90,7 @@ module.exports = {
         mode: "payment",
         ui_mode: "embedded",
         return_url: `${process.env.STRIPE_RETURN_URL}&user_id=${userId}`,
+        shipping_address_collection: { allowed_countries: ["US", "CA"] },
       };
 
       console.log("checkoutObject", checkoutObject);
@@ -84,6 +101,7 @@ module.exports = {
       return { clientSecret: session.client_secret };
     } catch (err) {
       console.log(err);
+      return { clientSecret: undefined };
     }
   },
   finishCheckout: async (sessionId: string, userId: string) => {
@@ -101,6 +119,7 @@ module.exports = {
     //TODO: store data about which variants were bought instead of just which product
     const newOrder = await strapi.entityService.create("api::order.order", {
       data: {
+        publishedAt: Date.now(),
         referenceId: referenceId,
         purchasedVariants: lineItems.map((item) => {
           return {
@@ -122,7 +141,12 @@ module.exports = {
 
     //reduce inventory of items they purchased
 
-    lineItems.forEach(async (item) => {
+    type VariantsAndNewQuantities = { id: ID; quantity: number };
+    //map product id => array of variants needing to be updated
+    let variantsAndNewQuantities: Map<string, VariantsAndNewQuantities[]> =
+      new Map();
+
+    for (const item of lineItems) {
       const productToModify = await strapi.entityService.findOne(
         "api::product.product",
         item.price.product.metadata.id,
@@ -132,37 +156,61 @@ module.exports = {
         },
       );
 
-      type VariantsAndNewQuantities = { id: ID; quantity: number };
-      const variantsAndNewQuantities: VariantsAndNewQuantities[] =
-        productToModify.variantInventory.reduce((acc, variant) => {
-          if (item.price.product.metadata.variantId == variant.id) {
-            // Found a variant we need to reduce
-            acc.push({
+      productToModify.variantInventory.forEach((variant) => {
+        // Found a variant we need to reduce
+
+        if (item.price.product.metadata.variantId == variant.id) {
+          console.log("item.price.product.metadata.variantId == variant.id");
+          if (variantsAndNewQuantities.has(item.price.product.metadata.id)) {
+            console.log(
+              "variantsAndNewQuantities.has(item.price.product.metadata.id, pushing",
+              {
+                id: variant.id,
+                quantity: variant.quantity - item.quantity,
+              },
+            );
+            variantsAndNewQuantities.get(item.price.product.metadata.id).push({
               id: variant.id,
               quantity: variant.quantity - item.quantity,
             });
           } else {
-            acc.push({
-              id: variant.id,
-              quantity: variant.quantity,
-            });
+            console.log("else setting new array", [
+              {
+                id: variant.id,
+                quantity: variant.quantity - item.quantity,
+              },
+            ]);
+            variantsAndNewQuantities.set(item.price.product.metadata.id, [
+              {
+                id: variant.id,
+                quantity: variant.quantity - item.quantity,
+              },
+            ]);
           }
-          return acc;
-        }, []);
-
-      console.log("updating a product with the following data:", {
-        variantInventory: variantsAndNewQuantities,
+        }
       });
+    }
 
-      strapi.entityService.update(
-        "api::product.product",
-        item.price.product.metadata.id,
-        {
-          data: {
-            variantInventory: variantsAndNewQuantities,
-          },
+    console.log(
+      "variantsAndNewQuantities",
+      variantsAndNewQuantities,
+      variantsAndNewQuantities.keys(),
+    );
+
+    Array.from(variantsAndNewQuantities.keys()).forEach((key) => {
+      console.log("updating a product with the following data:", {
+        data: {
+          variantInventory: variantsAndNewQuantities.get(key),
         },
-      );
+      });
+    });
+
+    Array.from(variantsAndNewQuantities.keys()).forEach((key) => {
+      strapi.entityService.update("api::product.product", key, {
+        data: {
+          variantInventory: variantsAndNewQuantities.get(key),
+        },
+      });
     });
 
     console.log("sessionWithLineItems", sessionWithLineItems);

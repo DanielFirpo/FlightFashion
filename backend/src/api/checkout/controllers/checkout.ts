@@ -10,6 +10,11 @@ module.exports = {
         .service("api::checkout.checkout")
         .startCheckout(ctx.request.body, ctx.state.user.id);
       // console.log("sending response", data);
+      if (!data.clientSecret) {
+        ctx.badRequest("Start checkout error", {
+          moreDetails: "Not enough items in stock.",
+        });
+      }
       ctx.body = data;
     } catch (err) {
       ctx.badRequest("Checkout controller error", { moreDetails: err });
