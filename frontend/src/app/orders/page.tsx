@@ -17,11 +17,7 @@ export default function Orders() {
     style: "currency",
     currency: "USD",
   });
-  //product colors change image carosel
-  //test logged out checkout
-  //show correct image for variant in cart
-  //cart/order items link back to product
-  //add shipping info to orders
+
   useEffect(() => {
     async function fetchData() {
       const { requestUrl } = buildStrapiRequest("/owned-orders");
@@ -40,8 +36,6 @@ export default function Orders() {
       fetchData();
     }
   }, [authenticatedUser]);
-
-  console.log("ORDERS!", orders);
 
   return (
     <div className="sm:px-12">

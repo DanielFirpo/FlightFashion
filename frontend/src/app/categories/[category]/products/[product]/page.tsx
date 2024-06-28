@@ -13,8 +13,6 @@ export default async function Product(props: { params: { product: string } }) {
     })
   ).data[0];
 
-  console.log("res", productData.attributes?.images?.data);
-
   if (!productData) return notFound();
 
   return (

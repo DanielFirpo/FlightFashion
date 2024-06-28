@@ -1152,6 +1152,13 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     referenceId: Attribute.UID & Attribute.Required;
     purchasedVariants: Attribute.Component<'product.order-product', true> &
       Attribute.Required;
+    city: Attribute.String & Attribute.Required;
+    country: Attribute.String & Attribute.Required;
+    line1: Attribute.String & Attribute.Required;
+    line2: Attribute.String;
+    postalCode: Attribute.String & Attribute.Required;
+    state: Attribute.String & Attribute.Required;
+    name: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

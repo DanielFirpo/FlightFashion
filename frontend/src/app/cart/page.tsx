@@ -104,36 +104,47 @@ export default function Page() {
       {!isLoading ? (
         <div className="flex min-h-96 flex-col justify-center gap-3">
           {data?.data.map((product) => {
-            const image = product.attributes.images?.data?.[0];
-
             const cartItem = cartItems.find((item) => item.id === product.id);
 
             return cartItem?.variantQuantities.map((variant) => {
               const { discountedPrice } = getPriceAfterDiscounts(product, variant);
+
+              let variantImage = product.attributes.images?.data?.[0];
+
+              product.attributes.images?.data.forEach((image) => {
+                console.log("image url includes color data?", image.attributes.url, "color-" + variant.colorId);
+                if (image.attributes.caption?.includes("color-" + variant.colorId)) {
+                  variantImage = image;
+                }
+              });
 
               return (
                 <div
                   key={`${variant.colorId}-${variant.sizeId}-${product.id}`}
                   className="mx-auto flex w-full max-w-[900px] flex-col items-center justify-between rounded-lg bg-white p-5 sm:h-28 sm:flex-row"
                 >
-                  <div>
-                    {image && (
-                      <Image
-                        width={image.attributes.width}
-                        height={image.attributes.height}
-                        alt={image.attributes.alternativeText ?? ""}
-                        className="max-w-24 rounded-xl bg-imageBackground"
-                        src={getImageURLBySize(image!, "thumbnail") ?? ""}
-                      ></Image>
-                    )}
-                  </div>
-                  <div className="mt-5 flex h-full w-full flex-col items-center justify-between gap-5 sm:ml-5 sm:mt-0 sm:flex-row sm:gap-2">
-                    <div className="flex h-full w-full flex-col justify-between overflow-hidden sm:max-w-56">
-                      <div className="line-clamp-2 break-words font-dmSans text-medium font-semibold">
-                        {product.attributes.name}
-                      </div>
-                      <div className="line-clamp-1 text-xs text-subtitleText">{product.attributes.description}</div>
+                  <Link href={"/categories/all/products/" + product.attributes.slug}>
+                    <div>
+                      {variantImage && (
+                        <Image
+                          width={variantImage.attributes.width}
+                          height={variantImage.attributes.height}
+                          alt={variantImage.attributes.alternativeText ?? ""}
+                          className="max-w-24 rounded-xl bg-imageBackground"
+                          src={getImageURLBySize(variantImage!, "thumbnail") ?? ""}
+                        ></Image>
+                      )}
                     </div>
+                  </Link>
+                  <div className="mt-5 flex h-full w-full flex-col items-center justify-between gap-5 sm:ml-5 sm:mt-0 sm:flex-row sm:gap-2">
+                    <Link href={"/categories/all/products/" + product.attributes.slug}>
+                      <div className="flex h-full w-full flex-col justify-between overflow-hidden sm:max-w-56">
+                        <div className="line-clamp-2 break-words font-dmSans text-medium font-semibold">
+                          {product.attributes.name}
+                        </div>
+                        <div className="line-clamp-1 text-xs text-subtitleText">{product.attributes.description}</div>
+                      </div>
+                    </Link>
                     <div className="flex flex-wrap gap-4">
                       {/* TODO: let user adjust quantity in cart */}
                       <div className="mb-auto flex items-center justify-center gap-1 text-sm text-subtitleText">

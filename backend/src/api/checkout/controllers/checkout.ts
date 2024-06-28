@@ -5,10 +5,9 @@ module.exports = {
       ctx.badRequest("Cart data not provided");
     }
     try {
-      console.log("logged in user", ctx.state.user.id);
       const data = await strapi
         .service("api::checkout.checkout")
-        .startCheckout(ctx.request.body, ctx.state.user.id);
+        .startCheckout(ctx.request.body, ctx.state.user?.id);
       // console.log("sending response", data);
       if (!data.clientSecret) {
         ctx.badRequest("Start checkout error", {
@@ -17,6 +16,7 @@ module.exports = {
       }
       ctx.body = data;
     } catch (err) {
+      console.log(err);
       ctx.badRequest("Checkout controller error", { moreDetails: err });
     }
   },

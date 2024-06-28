@@ -116,11 +116,22 @@ module.exports = {
 
     const referenceId = uuidv4();
 
+    console.log("shipping_details", sessionWithLineItems.shipping_details);
+
+    const shippingDetails = sessionWithLineItems.shipping_details;
+
     //TODO: store data about which variants were bought instead of just which product
     const newOrder = await strapi.entityService.create("api::order.order", {
       data: {
         publishedAt: Date.now(),
         referenceId: referenceId,
+        city: shippingDetails.address.city,
+        country: shippingDetails.address.country,
+        line1: shippingDetails.address.line1,
+        line2: shippingDetails.address.line2,
+        postalCode: shippingDetails.address.postal_code,
+        state: shippingDetails.address.state,
+        name: shippingDetails.name,
         purchasedVariants: lineItems.map((item) => {
           return {
             product_color: item.price.product.metadata.color,

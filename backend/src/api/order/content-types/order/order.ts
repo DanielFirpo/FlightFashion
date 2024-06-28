@@ -21,6 +21,13 @@ export interface Order {
     user?: { data: User };
     referenceId: string;
     purchasedVariants: OrderProduct[];
+    city: string;
+    country: string;
+    line1: string;
+    line2?: string;
+    postalCode: string;
+    state: string;
+    name: string;
   };
 }
 export interface Order_Plain {
@@ -30,6 +37,13 @@ export interface Order_Plain {
   user?: User_Plain;
   referenceId: string;
   purchasedVariants: OrderProduct_Plain[];
+  city: string;
+  country: string;
+  line1: string;
+  line2?: string;
+  postalCode: string;
+  state: string;
+  name: string;
 }
 
 export interface Order_NoRelations {
@@ -39,6 +53,13 @@ export interface Order_NoRelations {
   user?: number;
   referenceId: string;
   purchasedVariants: OrderProduct_NoRelations[];
+  city: string;
+  country: string;
+  line1: string;
+  line2?: string;
+  postalCode: string;
+  state: string;
+  name: string;
 }
 
 export interface Order_AdminPanelLifeCycle {
@@ -48,4 +69,11 @@ export interface Order_AdminPanelLifeCycle {
   user?: AdminPanelRelationPropertyModification<User_Plain>;
   referenceId: string;
   purchasedVariants: OrderProduct_Plain[];
+  city: string;
+  country: string;
+  line1: string;
+  line2?: string;
+  postalCode: string;
+  state: string;
+  name: string;
 }

@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2024-06-28T20:10:25.357Z"
+    "x-generation-date": "2024-06-28T21:13:00.327Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -5929,7 +5929,13 @@
           "data": {
             "required": [
               "referenceId",
-              "purchasedVariants"
+              "purchasedVariants",
+              "city",
+              "country",
+              "line1",
+              "postalCode",
+              "state",
+              "name"
             ],
             "type": "object",
             "properties": {
@@ -5965,6 +5971,27 @@
                 "items": {
                   "$ref": "#/components/schemas/ProductOrderProductComponent"
                 }
+              },
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              },
+              "line1": {
+                "type": "string"
+              },
+              "line2": {
+                "type": "string"
+              },
+              "postalCode": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
               }
             }
           }
@@ -6020,7 +6047,13 @@
         "type": "object",
         "required": [
           "referenceId",
-          "purchasedVariants"
+          "purchasedVariants",
+          "city",
+          "country",
+          "line1",
+          "postalCode",
+          "state",
+          "name"
         ],
         "properties": {
           "total": {
@@ -7470,6 +7503,27 @@
                                         }
                                       }
                                     },
+                                    "city": {
+                                      "type": "string"
+                                    },
+                                    "country": {
+                                      "type": "string"
+                                    },
+                                    "line1": {
+                                      "type": "string"
+                                    },
+                                    "line2": {
+                                      "type": "string"
+                                    },
+                                    "postalCode": {
+                                      "type": "string"
+                                    },
+                                    "state": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
                                     "createdAt": {
                                       "type": "string",
                                       "format": "date-time"
@@ -7579,6 +7633,27 @@
             "items": {
               "$ref": "#/components/schemas/ProductOrderProductComponent"
             }
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "line1": {
+            "type": "string"
+          },
+          "line2": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",

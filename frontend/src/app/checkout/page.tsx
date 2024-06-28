@@ -27,10 +27,11 @@ export default function Page() {
     });
 
     if (session.status !== 200) {
+      //they have stuff in their cart that is sold out, clear their cart and send them back
+      localStorage.setItem("cartItems", JSON.stringify([]));
+      window.dispatchEvent(new Event("storage"));
       router.push("/cart");
     }
-
-    console.log("checkout", session);
 
     return (await session.json()).clientSecret;
   };
@@ -38,13 +39,9 @@ export default function Page() {
   return (
     <>
       <div id="checkout" className="mx-auto mt-20 max-w-[62rem] overflow-hidden rounded-lg">
-        {authenticatedUser ? (
-          <EmbeddedCheckoutProvider stripe={stripePromise} options={{ fetchClientSecret }}>
-            <EmbeddedCheckout />
-          </EmbeddedCheckoutProvider>
-        ) : (
-          <p>loading....................</p>
-        )}
+        <EmbeddedCheckoutProvider stripe={stripePromise} options={{ fetchClientSecret }}>
+          <EmbeddedCheckout />
+        </EmbeddedCheckoutProvider>
       </div>
     </>
   );
