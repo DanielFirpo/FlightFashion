@@ -88,8 +88,8 @@ export default function Page() {
   });
 
   return (
-    <div className="px-12">
-      <div className="mb-5 mt-12 flex w-full justify-between">
+    <div className="sm:px-12">
+      <div className="mb-5 mt-12 flex w-full flex-wrap justify-center gap-5 sm:justify-between">
         <div className="flex items-center gap-6">
           <div className="text-xl font-gigabold">Your Cart</div>
           <div className="text-sm">{cartItemCount} Items</div>
@@ -179,7 +179,7 @@ export default function Page() {
         <p>loading...</p>
       )}
 
-      <div className="mt-12 flex w-full justify-between">
+      <div className="mt-12 flex w-full flex-wrap justify-center gap-8 sm:justify-between">
         <Link href="/categories/all/products">
           <Button size="sm">
             <span className="icon-[ph--arrow-left-bold] mb-0.5 mr-2 mt-0.5 size-4 align-middle"></span>Continue Shopping
