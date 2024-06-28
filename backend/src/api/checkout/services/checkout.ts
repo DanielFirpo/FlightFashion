@@ -110,7 +110,7 @@ module.exports = {
             product: item.price.product.metadata.id,
           };
         }),
-        status: "Completed",
+        status: "Shipped",
         ...(userId !== "undefined" ? { user: userId } : {}),
         total: lineItems.reduce((all, cur) => {
           return all + (cur.amount_total + cur.amount_tax) / 100;

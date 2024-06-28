@@ -7,17 +7,14 @@ import Product from "./_components/ProductListItem";
 import { Product as ProductResponse } from "@apiTypes/product/content-types/product/product";
 import { notFound } from "next/navigation";
 
-export default async function Products(props: {
-  params: { category: string };
-}) {
+export default async function Products(props: { params: { category: string } }) {
   const pageData: ProductsPage = (
     await fetchAPI("/products-page", {
       populate: "filter_list_1,filter_list_2,filter_list_3",
     })
   ).data;
 
-  const categories: Category[] = (await fetchAPI("/categories", { sort: "id" }))
-    .data;
+  const categories: Category[] = (await fetchAPI("/categories", { sort: "id" })).data;
 
   //make sure All category is first in array
   const allCategory = categories.splice(
@@ -27,8 +24,7 @@ export default async function Products(props: {
   categories.unshift(allCategory[0]);
 
   const currentCategory = categories.filter(
-    (cat) =>
-      props.params.category.toLowerCase() === cat.attributes.name.toLowerCase(),
+    (cat) => props.params.category.toLowerCase() === cat.attributes.name.toLowerCase(),
   )[0];
   if (!currentCategory) return notFound();
 
@@ -58,15 +54,8 @@ export default async function Products(props: {
 
   return (
     <>
-      <ProductList
-        category={currentCategory}
-        pageData={pageData}
-        products={products}
-      >
-        <CategoryCarousel
-          category={props.params.category}
-          categories={categories}
-        ></CategoryCarousel>
+      <ProductList category={currentCategory} pageData={pageData} products={products}>
+        <CategoryCarousel category={props.params.category} categories={categories}></CategoryCarousel>
         <></>
       </ProductList>
     </>

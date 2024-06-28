@@ -13,7 +13,7 @@ export default async function OrderInfo({ referenceId }: { referenceId: string }
   });
 
   return (
-    <div className="px-12">
+    <div>
       <div className="mt-12 flex w-full justify-between">
         <div className="flex items-center gap-6">
           <div className="text-xl font-gigabold">Order #</div>
@@ -80,6 +80,10 @@ export default async function OrderInfo({ referenceId }: { referenceId: string }
               </div>
             );
           })}
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="text-xl font-gigabold">Order Status:</div>
+          <div className="text-sm">{orderData.status}</div>
         </div>
       </div>
     </div>
