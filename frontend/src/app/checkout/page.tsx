@@ -5,11 +5,14 @@ import { loadStripe } from "@stripe/stripe-js";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { useCallback, useContext, useEffect } from "react";
 import { AuthContext } from "../_providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY ?? "");
 
 export default function Page() {
   const { authenticatedUser } = useContext(AuthContext);
+
+  const router = useRouter();
 
   const fetchClientSecret = async (): Promise<string> => {
     const { requestUrl } = buildStrapiRequest("/checkout", {}, {}, authenticatedUser?.userToken);
@@ -22,6 +25,12 @@ export default function Page() {
       },
       body: localStorage.getItem("cartItems"),
     });
+
+    if (session.status !== 200) {
+      router.push("/cart");
+    }
+
+    console.log("checkout", session);
 
     return (await session.json()).clientSecret;
   };

@@ -6,6 +6,7 @@ import { buildStrapiRequest, fetchAPI } from "../_utils/strapiApi";
 import { AuthContext } from "../_providers/AuthProvider";
 import { useContext, useEffect, useState } from "react";
 import { Button } from "../_components/shadcn/button";
+import { Skeleton } from "@/src/app/_components/shadcn/skeleton";
 
 export default function Orders() {
   const { authenticatedUser } = useContext(AuthContext);
@@ -16,7 +17,11 @@ export default function Orders() {
     style: "currency",
     currency: "USD",
   });
-
+  //product colors change image carosel
+  //test logged out checkout
+  //show correct image for variant in cart
+  //cart/order items link back to product
+  //add shipping info to orders
   useEffect(() => {
     async function fetchData() {
       const { requestUrl } = buildStrapiRequest("/owned-orders");
@@ -42,7 +47,7 @@ export default function Orders() {
     <div className="sm:px-12">
       <h1 className="mx-auto my-12 w-fit text-3xl font-gigabold">Orders</h1>
       <div className="w-full">
-        {orders && (
+        {orders ? (
           <div className="flex min-h-96 flex-col items-center justify-center gap-3">
             {orders.map((order) => {
               return (
@@ -73,6 +78,13 @@ export default function Orders() {
                 </div>
               );
             })}
+          </div>
+        ) : (
+          <div className="flex min-h-96 w-full flex-col items-center justify-center gap-3">
+            <Skeleton className="h-28 w-full max-w-[900px]"></Skeleton>
+            <Skeleton className="h-28 w-full max-w-[900px]"></Skeleton>
+            <Skeleton className="h-28 w-full max-w-[900px]"></Skeleton>
+            <Skeleton className="h-28 w-full max-w-[900px]"></Skeleton>
           </div>
         )}
       </div>

@@ -7,6 +7,7 @@ import useSWR from "swr";
 import Image from "next/image";
 import { Button } from "../_components/shadcn/button";
 import Link from "next/link";
+import { Skeleton } from "../_components/shadcn/skeleton";
 
 export type ItemVariant = {
   colorId: number | undefined;
@@ -176,7 +177,10 @@ export default function Page() {
           })}
         </div>
       ) : (
-        <p>loading...</p>
+        <div className="flex min-h-96 w-full flex-col items-center justify-center gap-3">
+          <Skeleton className="h-28 w-full max-w-[900px]"></Skeleton>
+          <Skeleton className="h-28 w-full max-w-[900px]"></Skeleton>
+        </div>
       )}
 
       <div className="mt-12 flex w-full flex-wrap justify-center gap-8 sm:justify-between">
