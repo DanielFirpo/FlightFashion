@@ -1141,11 +1141,6 @@ export interface ApiOrderOrder extends Schema.CollectionType {
   };
   attributes: {
     total: Attribute.Decimal;
-    products: Attribute.Relation<
-      'api::order.order',
-      'oneToMany',
-      'api::product.product'
-    >;
     status: Attribute.Enumeration<
       ['Completed', 'Shipped', 'Delivered', 'Refunded']
     >;
@@ -1154,6 +1149,9 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+    referenceId: Attribute.UID & Attribute.Required;
+    purchasedVariants: Attribute.Component<'product.order-product', true> &
+      Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

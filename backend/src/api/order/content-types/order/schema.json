@@ -15,11 +15,6 @@
     "total": {
       "type": "decimal"
     },
-    "products": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product.product"
-    },
     "status": {
       "type": "enumeration",
       "enum": [
@@ -34,6 +29,17 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "orders"
+    },
+    "referenceId": {
+      "type": "uid",
+      "required": true
+    },
+    "purchasedVariants": {
+      "displayName": "orderProduct",
+      "type": "component",
+      "repeatable": true,
+      "component": "product.order-product",
+      "required": true
     }
   }
 }

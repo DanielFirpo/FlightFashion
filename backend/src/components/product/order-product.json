@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_product_order_products",
+  "info": {
+    "displayName": "orderProduct",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "product_color": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-color.product-color"
+    },
+    "product_size": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-size.product-size"
+    },
+    "quantity": {
+      "type": "integer",
+      "required": true
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product"
+    }
+  }
+}

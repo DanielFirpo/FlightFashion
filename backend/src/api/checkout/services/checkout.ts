@@ -3,6 +3,7 @@ import { Inventory } from "../../../components/product/interfaces/Inventory";
 import { MediaFormat } from "../../../common/schemas-to-ts/MediaFormat";
 import { Order_Plain } from "../../order/content-types/order/order";
 import { ID } from "@strapi/types/dist/types/core/entity";
+import { v4 as uuidv4 } from "uuid";
 
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 
@@ -95,19 +96,25 @@ module.exports = {
     );
     const lineItems = sessionWithLineItems.line_items.data;
 
+    const referenceId = uuidv4();
+
     //TODO: store data about which variants were bought instead of just which product
     const newOrder = await strapi.entityService.create("api::order.order", {
       data: {
-        products: {
-          connect: lineItems.map((item) => item.price.product.metadata.id),
-        },
+        referenceId: referenceId,
+        purchasedVariants: lineItems.map((item) => {
+          return {
+            product_color: item.price.product.metadata.color,
+            product_size: item.price.product.metadata.size,
+            quantity: item.quantity,
+            product: item.price.product.metadata.id,
+          };
+        }),
         status: "Completed",
         ...(userId !== "undefined" ? { user: userId } : {}),
-        total: lineItems.reduce(
-          (all, cur) =>
-            all + (cur.amount_total + cur.amount_tax) * cur.quantity,
-          0,
-        ),
+        total: lineItems.reduce((all, cur) => {
+          return all + (cur.amount_total + cur.amount_tax) / 100;
+        }, 0),
       },
     });
 
@@ -159,7 +166,9 @@ module.exports = {
     });
 
     console.log("sessionWithLineItems", sessionWithLineItems);
-    return process.env.STRIPE_RETURN_REDIRECT_URL + "?status=success";
+    return (
+      process.env.STRIPE_RETURN_REDIRECT_URL + "?referenceId=" + referenceId
+    );
   },
 };
 
