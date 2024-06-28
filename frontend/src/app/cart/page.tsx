@@ -88,7 +88,7 @@ export default function Page() {
   });
 
   return (
-    <>
+    <div className="px-12">
       <div className="mb-5 mt-12 flex w-full justify-between">
         <div className="flex items-center gap-6">
           <div className="text-xl font-gigabold">Your Cart</div>
@@ -101,7 +101,7 @@ export default function Page() {
       </div>
 
       {!isLoading ? (
-        <div className="flex min-h-96 flex-col gap-3">
+        <div className="flex min-h-96 flex-col justify-center gap-3">
           {data?.data.map((product) => {
             const image = product.attributes.images?.data?.[0];
 
@@ -191,7 +191,7 @@ export default function Page() {
           </Button>
         </Link>
       </div>
-    </>
+    </div>
   );
 
   function getPriceAfterDiscounts(product: Product, variant: ItemVariant): { totalPrice: number; discountedPrice: number } {

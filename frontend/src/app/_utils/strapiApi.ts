@@ -66,12 +66,6 @@ export async function fetchAPIClient(requestUrl: string, mergedOptions = {}) {
  * Client only.
  */
 export function buildStrapiRequest(path: string, urlParamsObject = {}, options = {}, userToken?: string) {
-  console.log(
-    "userToken",
-    userToken,
-    `Bearer ${userToken ? userToken : process.env.NEXT_PUBLIC_API_TOKEN}`,
-    userToken === process.env.NEXT_PUBLIC_API_TOKEN,
-  );
   // Merge default and user options
   const mergedOptions = {
     next: { revalidate: 1 },
