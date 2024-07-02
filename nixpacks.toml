@@ -1,3 +1,4 @@
+[phases.prov]
 providers = ['node']
 
 [phases.setup]
