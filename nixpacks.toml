@@ -1,5 +1,6 @@
-[phases.setup]
 providers = ['node']
+
+[phases.setup]
 nixPkgs = ['node', 'npm']
 
 [phases.install]
