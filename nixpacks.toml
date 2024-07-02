@@ -2,13 +2,17 @@
 providers = ['node']
 
 [phases.setup]
+dependsOn = ['prov']
 nixPkgs = ['node', 'npm']
 
 [phases.install]
+dependsOn = ['setup']
 cmds = ['cd /frontend && npm install']
 
 [phases.build]
+dependsOn = ['install']
 cmds = ['cd /frontend && npm run build']
 
 [phases.start]
+dependsOn = ['build']
 cmd = 'cd /frontend && npm run start'
