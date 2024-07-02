@@ -1,17 +1,17 @@
-[build]
-base = "."
+[phases.setup]
+nixPkgs = ['node', 'npm']
 
-[[buildPhases]]
-name = "Install dependencies"
-run = "cd /frontend && npm install"
+[phases.install]
+cmds = ['npm install']
 
-[[buildPhases]]
-name = "Build"
-run = "cd /frontend && npm run build"
+[phases.build]
+cmds = ['npm run build']
 
-[start]
-base = "."
-command = "cd /frontend && npm start"
+[phases.start]
+cmd = 'npm run start'
+[phases.start]
+workdir = "/frontend"
 
-[language]
-name = "node"
+[overlays]
+# Include the parent directory as an overlay
+. = ./
