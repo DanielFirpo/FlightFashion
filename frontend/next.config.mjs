@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cdn.dribbble.com',
+        hostname: process.env.NEXT_PUBLIC_ALLOWED_IMAGE_DOMAIN,
       },
       {
         protocol: 'http',
