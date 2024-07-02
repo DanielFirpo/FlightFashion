@@ -1,0 +1,17 @@
+{
+    "name": "flight",
+    "private": true,
+    "version": "0.1.0",
+    "description": "flight",
+    "scripts": {
+        "build": "cd frontend && next build",
+        "start": "cd frontend && next start"
+    },
+    "dependencies": {
+    },
+    "engines": {
+      "node": ">=18.0.0 <=20.x.x",
+      "npm": ">=6.0.0"
+    }
+  }
+  
