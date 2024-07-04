@@ -14,6 +14,7 @@ import Product from "./ProductListItem";
 import ProductPaginationControl from "./PaginationControl";
 import FilterList from "./FilterList";
 import Link from "next/link";
+import { Skeleton } from "@/src/app/_components/shadcn/skeleton";
 
 export default function ProductList(props: {
   category: Category;
@@ -210,30 +211,41 @@ export default function ProductList(props: {
         </div>
 
         {/* Product List */}
-        {products?.length || isLoading ? (
-          <div className="mt-10 flex flex-wrap justify-center gap-5 md:mt-0">
-            <div className="invisible hidden h-[32rem] w-64 md:inline-block"></div>
-            {products
-              ? products.map((product) => {
-                  return <Product key={product.attributes.slug} product={product}></Product>;
-                })
-              : props.children.slice(1, props.children.length)}
-          </div>
+        {data ? (
+          <>
+            {products?.length || isLoading ? (
+              <div className="mt-10 flex flex-wrap justify-center gap-5 md:mt-0">
+                <div className="invisible hidden h-[32rem] w-64 md:inline-block"></div>
+                {products
+                  ? products.map((product) => {
+                      return <Product key={product.attributes.slug} product={product}></Product>;
+                    })
+                  : props.children.slice(1, props.children.length)}
+              </div>
+            ) : (
+              <div className="flex h-[28rem] items-center justify-center text-center md:ml-64">
+                <div className="flex w-fit flex-col gap-6">
+                  <div className="text-2xl font-bold">Oh No!</div>
+                  <div className="text-large">No products match your search criteria...</div>
+                  <Button
+                    onClick={() => {
+                      setSearchTerm(null);
+                      setSelectedTags([]);
+                      resetPagination();
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
+              </div>
+            )}
+          </>
         ) : (
-          <div className="flex h-[28rem] items-center justify-center text-center md:ml-64">
-            <div className="flex w-fit flex-col gap-6">
-              <div className="text-2xl font-bold">Oh No!</div>
-              <div className="text-large">No products match your search criteria...</div>
-              <Button
-                onClick={() => {
-                  setSearchTerm(null);
-                  setSelectedTags([]);
-                  resetPagination();
-                }}
-              >
-                Clear Filters
-              </Button>
-            </div>
+          <div className="mt-10 flex flex-wrap justify-center gap-5 md:mt-0">
+            <Skeleton className="h-[32rem] w-64 cursor-pointer flex-col gap-2 text-wrap break-words rounded-3xl bg-transparent hover:bg-white"></Skeleton>
+            {[...Array(3)].map((x, index) => (
+              <Skeleton key={index} className="h-[32rem] w-64 flex-col gap-2 text-wrap break-words rounded-3xl"></Skeleton>
+            ))}
           </div>
         )}
       </div>
