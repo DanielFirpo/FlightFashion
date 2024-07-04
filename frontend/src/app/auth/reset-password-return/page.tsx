@@ -3,8 +3,9 @@
 import { useContext, useEffect } from "react";
 import { AuthContext, AuthScreen } from "../../_providers/AuthProvider";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function ResetPasswordReturn() {
+function ResetPassword() {
   // const [isMounted, setIsMounted] = useState(false);
   const searchParams = useSearchParams();
 
@@ -17,5 +18,13 @@ export default function ResetPasswordReturn() {
     router.push("/?code=" + code);
   }, [code, router, setAuthScreen]);
 
-  return null;
+  return <></>;
+}
+
+export default function ResetPasswordReturn() {
+  return (
+    <Suspense>
+      <ResetPassword></ResetPassword>
+    </Suspense>
+  );
 }
