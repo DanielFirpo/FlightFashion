@@ -6,12 +6,15 @@ import { notFound } from "next/navigation";
 import BackButton from "./_components/BackButton";
 
 export default async function Product(props: { params: { product: string } }) {
-  const productData: ProductType = (
-    await fetchAPI("/products?populate=*,images,product_sizes,product_colors", {
-      filters: { slug: props.params.product },
-      // populate: "images,product_sizes,product_colors,variantInventory,*",
-    })
-  ).data[0];
+  console.log("filters", { filters: { slug: { eq: props.params.product } } });
+
+  let productData: any = await fetchAPI(
+    `/products?populate=*,images,product_sizes,product_colors&filters[slug][$eq]=${props.params.product}`,
+  );
+
+  console.log(JSON.stringify(productData));
+
+  productData = productData.data[0];
 
   if (!productData) return notFound();
 
@@ -28,7 +31,7 @@ export default async function Product(props: { params: { product: string } }) {
 
           <div className="mb-6 line-clamp-2 font-alumniSans text-6xl font-gigabold">{productData.attributes.name}</div>
 
-          <div className="line-clamp-2 text-sm text-subtitleText">{productData.attributes.description}</div>
+          <div className="line-clamp-2 h-16 text-sm text-subtitleText">{productData.attributes.description}</div>
 
           <ProductForm productData={productData}></ProductForm>
         </div>

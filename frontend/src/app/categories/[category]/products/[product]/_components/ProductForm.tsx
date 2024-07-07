@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Product } from "@apiTypes/product/content-types/product/product";
 import { ProductSize } from "@apiTypes/product-size/content-types/product-size/product-size";
 import { ProductColor } from "@apiTypes/product-color/content-types/product-color/product-color";
@@ -11,11 +11,14 @@ import clsx from "clsx";
 import PriceDisplay from "../../_components/PriceDisplay";
 import { StoredCartItem, ItemVariant } from "@/src/app/cart/page";
 import { Inventory, Inventory_Plain } from "../../../../../../../../backend/src/components/product/interfaces/Inventory";
+import { AuthContext, AuthScreen } from "@/src/app/_providers/AuthProvider";
 
 export default function ProductForm(props: { productData: Product }) {
   const { toast } = useToast();
 
   const productData = props.productData;
+
+  const { setAuthScreen, authenticatedUser } = useContext(AuthContext);
 
   const [colorSelection, setColorSelection] = useState<ProductColor | undefined>(
     props.productData.attributes.product_colors?.data[0],
@@ -40,7 +43,7 @@ export default function ProductForm(props: { productData: Product }) {
       <div>
         {/* Color Selector */}
         <div className={inputTitleClasses}>Color</div>
-        <div className="mb-1.5 mt-3 flex">
+        <div className="mb-1.5 ml-2 mt-3 flex">
           {productData.attributes.product_colors?.data.map((color: ProductColor) => {
             return (
               <div onClick={() => setColorSelection(color)} key={color.attributes.name + color.id} className="relative">
@@ -64,7 +67,7 @@ export default function ProductForm(props: { productData: Product }) {
       {/* Size Selector */}
       <div>
         <div className={inputTitleClasses}>Size</div>
-        <div className="mt-3">
+        <div className="ml-2 mt-3">
           {productData.attributes.product_sizes?.data.map((size: ProductSize) => {
             return (
               <button
@@ -179,11 +182,16 @@ export default function ProductForm(props: { productData: Product }) {
         {/* Add to Favorites */}
         <button
           onClick={() => {
-            toast({
-              className: cn("top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"),
-              title: "Added to Favorites",
-              description: productData.attributes.name,
-            });
+            if (!authenticatedUser) {
+              setAuthScreen(AuthScreen.LOGIN);
+            } else {
+              //TODO create favorites functionality
+              toast({
+                className: cn("top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"),
+                title: "Added to Favorites",
+                description: productData.attributes.name,
+              });
+            }
           }}
           className="ml-3 flex h-12 w-12 items-center justify-center rounded-xl border-1.5
                  border-black px-3"

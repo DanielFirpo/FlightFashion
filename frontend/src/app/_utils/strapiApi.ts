@@ -40,6 +40,7 @@ export async function fetchAPI(path: string, urlParamsObject = {}, options = {})
   try {
     const { requestUrl, mergedOptions } = buildStrapiRequest(path, urlParamsObject, options);
 
+    console.log("fetching", requestUrl, mergedOptions);
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions);
     const data = await response.json();
