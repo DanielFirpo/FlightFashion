@@ -23,7 +23,7 @@ export default function Product(props: { product: ProductType }) {
             width={400}
             height={300}
             style={{ objectFit: "cover" }}
-            className="max-h-56 w-full rounded-3xl bg-imageBackground"
+            className="max-h-56 w-full rounded-3xl bg-white p-2"
             alt={props.product.attributes.name}
             src={imageUrl ? imageUrl : noImage}
           ></Image>

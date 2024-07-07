@@ -31,7 +31,7 @@ export default async function Product(props: { params: { product: string } }) {
 
           <div className="mb-6 line-clamp-2 font-alumniSans text-6xl font-gigabold">{productData.attributes.name}</div>
 
-          <div className="line-clamp-2 h-16 text-sm text-subtitleText">{productData.attributes.description}</div>
+          <div className="line-clamp-4 h-20 text-sm text-subtitleText">{productData.attributes.description}</div>
 
           <ProductForm productData={productData}></ProductForm>
         </div>

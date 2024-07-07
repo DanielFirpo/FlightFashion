@@ -32,7 +32,7 @@ export default async function Products(props: { params: { category: string } }) 
   //This one is so that when the page arrives on the client's browser they
   //can instantly see the products. Later fetches are for filters additional pages
   const products: ProductResponse[] = (
-    await fetchAPI("/products", {
+    await fetchAPI("/products?sort=title", {
       ...(props.params.category.toLowerCase() != "all"
         ? {
             filter: {
@@ -44,7 +44,7 @@ export default async function Products(props: { params: { category: string } }) 
             },
           }
         : {}),
-      sort: "isBestSeller",
+      sort: "title",
       pagination: {
         pageSize: 19,
         page: 1,

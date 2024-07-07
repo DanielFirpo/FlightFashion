@@ -85,7 +85,7 @@ export default function ProductList(props: {
           }
         : {}),
     },
-    sort: "isBestSeller",
+    sort: "name",
     pagination: {
       pageSize: 19,
       page: page,
