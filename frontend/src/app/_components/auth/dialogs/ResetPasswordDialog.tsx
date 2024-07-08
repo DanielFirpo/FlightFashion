@@ -55,7 +55,7 @@ export default function ResetPasswordDialog() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     axios
-      .post("http://localhost:1337/api/auth/reset-password", {
+      .post(process.env.NEXT_PUBLIC_API_URL + "api/auth/reset-password", {
         code: code,
         password: values.password,
         passwordConfirmation: values.confirmPassword,
